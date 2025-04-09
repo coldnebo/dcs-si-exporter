@@ -93,7 +93,7 @@ local function getTelemetry()
     var_data["COM TRANSMIT:1"] = 1
     var_data["MAGVAR"] = 0 -- Placeholder
     var_data["TRANSPONDER CODE:1"] = siout["XPNDR_SET"] or 1200
-    var_data["TRANSPONDER STATE:1"] = 1
+    var_data["TRANSPONDER STATE:1"] = 4
 
 
     -- SEA LEVEL PRESSURE (in millibars)

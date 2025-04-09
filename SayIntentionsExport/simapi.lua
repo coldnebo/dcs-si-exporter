@@ -69,7 +69,7 @@ function simapi.default_input()
 	var_data["CIRCUIT COM ON:1"] = 1  				-- (INT) If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM1 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
 	var_data["CIRCUIT COM ON:2"] = 1 				-- (INT) If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM2 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
 
-	var_data["ELECTRICAL MASTER BATTERY:0"] = 0  	-- (INT) If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the airplane electrical master switch is on or off. Possible values are 1 or 0.
+	var_data["ELECTRICAL MASTER BATTERY:0"] = 1  	-- (INT) If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the airplane electrical master switch is on or off. Possible values are 1 or 0.
 
 	var_data["TRANSPONDER IDENT"] = 0 				-- (INT) Indicates whether the transponder is currently in "IDENT" mode. Possible values are 1 or 0.
 	var_data["TRANSPONDER STATE:1"] = 0 			-- (INT) Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
