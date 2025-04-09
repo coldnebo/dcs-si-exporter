@@ -13,6 +13,11 @@ AMAZING!!!
 
 Work in Progress
 
+HACK in Progress -- I have a super hack, which is to read the frequencies from the SI client
+and write them back out to the simAPI_input.json until I can source them properly from the
+sim.
+
+
 ### MVP Requirements
 
 The following simAPI values are hardcoded currently because I can't find a good source for 
@@ -67,6 +72,20 @@ pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayI
 * startup DCS, choose an aircraft and a starting location (i.e. Nellis, Nevada)
 
 * startup the SayIntentions.ai client application.
+
+
+## Development
+
+* git clone this repo to a project directory
+
+* remove the 
+
+* start PowerShell in Admin mode to create a symlink:
+
+```
+New-Item -ItemType SymbolicLink -Path "%UserProfile%\Saved Games\DCS.openbeta\Scripts\SayIntentionsExport" -Value "path-to-project-dir\dcs-si-exporter\SayIntentionsExport"
+```
+
 
 ## License
 

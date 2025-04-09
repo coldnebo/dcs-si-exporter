@@ -1,44 +1,45 @@
 
+package.path = package.path .. ";" .. lfs.writedir() .. "Scripts\\SayIntentionsExport\\?.lua"
+
+local sayintentions_path = os.getenv("LOCALAPPDATA") .. "\\SayIntentionsAI\\"
+
+local simapi_input_file = sayintentions_path .. "simAPI_input.json"
+local simapi_output_file = sayintentions_path .. "simAPI_output.jsonl"
+local simapi_debug_file = sayintentions_path .. "dcs-si-exporter_debug.txt"
+
+
 local function log_marker(msg)
-    local log = io.open(os.getenv("LOCALAPPDATA") .. "\\SayIntentionsAI\\DCS_SayIntentionsExport_debug_log.txt", "a")
-    log:write("SayIntentionsExport.lua marker [" .. msg .. "]  reached at " .. os.date() .. "\n")
+    local log = io.open(simapi_debug_file, "a")
+    log:write("dcs-si-exporter: [" .. msg .. "] reached at " .. os.date() .. "\n")
     log:close()
 end
 
-log_marker("top of file")
-
-log_marker("loading lfs")
-local lfs = require("lfs")
-
-
-log_marker("loading dkjson")
-package.path = package.path .. ";" .. lfs.writedir() .. "Scripts\\SayIntentionsExport\\?.lua"
-
-local jsonOK, json = pcall(require, "dkjson")
-if not jsonOK then
-    log_marker("FAILED to load dkjson.lua")
-    json = nil
+local function safe_require(library)
+    log_marker("loading " .. library )
+    local libraryOK, libraryObj = pcall(require, library)
+    if not libraryOK then
+        log_marker("FAILED to load " .. library .. ".lua with error: " .. tostring(libraryObj))
+        libraryObj = nil
+    end
+    return libraryObj
 end
 
 
-log_marker("setting SI path")
-local sayintentions_path = os.getenv("LOCALAPPDATA") .. "\\SayIntentionsAI\\simAPI_input.json"
 
+log_marker("top of file")
 
-
-
-
+local lfs = safe_require("lfs")
+local json = safe_require("dkjson")
+local simapi = safe_require("simapi")
 
 
 
 log_marker("defining getTelemetry()")
 local function getTelemetry()
-    local data = {}
+    local data, var_data, sim_data
 
-    data["sim"] = {}
-    data["sim"]["variables"] = {}
-    local var_data = data["sim"]["variables"]
-    local sim_data = data["sim"]
+    data, var_data, sim_data = simapi.default_input()
+
 
     log_marker("starting getTelemetry collection")
     -- These functions are available from the DCS Lua environment:
@@ -74,20 +75,24 @@ local function getTelemetry()
         end
     end
 
-    -- Hardcoded or placeholder values for now
-
-    -- we need sources for all these:
-    var_data["COM ACTIVE FREQUENCY:1"] = 124.0
-    var_data["COM ACTIVE FREQUENCY:2"] = 127.5
-    var_data["COM RECEIVE:1"] = 1
-    var_data["COM RECEIVE:2"] = 0
-    var_data["COM TRANSMIT:1"] = 1
-    var_data["COM TRANSMIT:2"] = 0
     var_data["INDICATED ALTITUDE"] = var_data["PLANE ALTITUDE"]
     var_data["ENGINE TYPE"] = 1 -- Jet
     var_data["MAGNETIC COMPASS"] = var_data["PLANE HEADING DEGREES TRUE"]
+    
+
+    -- SUPER HACK!!! use the SI client to select the frequencies, then reflect them 
+    -- back into the output until we figure out how to read the aircraft radios!
+    local siout = simapi.fetch_output(json, simapi_output_file)
+
+
+    -- Hardcoded or placeholder values for now
+
+    -- we need sources for all these:
+    var_data["COM ACTIVE FREQUENCY:1"] = siout["COM_RADIO_SET_HZ"] / 1000000
+    var_data["COM RECEIVE:1"] = 1
+    var_data["COM TRANSMIT:1"] = 1
     var_data["MAGVAR"] = 0 -- Placeholder
-    var_data["TRANSPONDER CODE:1"] = 1200
+    var_data["TRANSPONDER CODE:1"] = siout["XPNDR_SET"] or 1200
     var_data["TRANSPONDER STATE:1"] = 1
 
 
@@ -125,10 +130,6 @@ local function getTelemetry()
     -- No direct access to wheel rotation in DCS API; use 0 if in air
     var_data["WHEEL RPM"] = plane_on_ground == 1 and 150 or 0  -- crude estimate
 
-    -- TRANSPONDER IDENT
-    -- No way to read IDENT state from cockpit without using DCS BIOS (per aircraft)
-    var_data["TRANSPONDER IDENT"] = 0  -- default off
-
 
 
     -- Metadata
@@ -156,7 +157,7 @@ function SayIntentionsExport()
     end
     
     log_marker("writing telemetry")
-    local file = io.open(sayintentions_path, "w")
+    local file = io.open(simapi_input_file, "w")
     if file then
         file:write(json.encode(telemetry))
         file:close()
