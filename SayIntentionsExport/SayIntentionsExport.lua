@@ -39,6 +39,7 @@ local function roundTo833(freq)
     return math.floor(freq / spacing + 0.5) * spacing
 end
 
+local xpdr = 1200
 
 log_marker("defining getTelemetry()")
 local function getTelemetry()
@@ -69,6 +70,10 @@ local function getTelemetry()
         dev:set_frequency( siout["COM_RADIO_SET_HZ"] )  -- in Hz
     end
 
+    if siout["XPNDR_SET"] then 
+        xpdr = math.floor(tonumber(siout["XPNDR_SET"])) 
+    end
+
     local freq = roundTo833(dev:get_frequency())
 
    
@@ -85,8 +90,7 @@ local function getTelemetry()
     -- math.floor(var_data["PLANE HEADING DEGREES TRUE"] - var_data["MAGNETIC COMPASS"])     -- (INT) The magnetic variation at the current position of the aircraft. This will be added to the current heading to get a true heading, thus negative numbers may be used where appropriate. Example value:  -12
 
     var_data["MAGNETIC COMPASS"] = math.deg(yaw) + var_data["MAGVAR"] -- rad to deg + magvar                -- (INT) The indicated heading, in degrees
-    var_data["TRANSPONDER CODE:1"] = 1200
-    --siout["XPNDR_SET"] or 1200              -- (INT) The currently indicated 4-digit transponder code.  (Example: 2543)
+    var_data["TRANSPONDER CODE:1"] =  xpdr              -- (INT) The currently indicated 4-digit transponder code.  (Example: 2543)
 
     
     -- REQUIRED:TELEMETRY

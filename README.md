@@ -59,6 +59,7 @@ Features and Current Status:
   * hardcoded to 1200 for now
   * [TODO] read from F-16C
   * [TODO] lookup for other aircraft
+  * can be hacked by writing `{"setvar":"XPNDR_SET","value":"1114"}` into simAPI_output.jsonl
 
 * `TRANSPONDER IDENT` - NA
   * [TODO] implement? not sure where this equivalent function is in the F-16C?
