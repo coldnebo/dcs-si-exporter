@@ -33,6 +33,12 @@ local json = safe_require("dkjson")
 local simapi = safe_require("simapi")
 
 
+-- support 8.333kHz channel spacing
+local function roundTo833(freq)
+    local spacing = 25e3 / 3  -- equals 8333.333...
+    return math.floor(freq / spacing + 0.5) * spacing
+end
+
 
 log_marker("defining getTelemetry()")
 local function getTelemetry()
@@ -41,9 +47,10 @@ local function getTelemetry()
 
     log_marker("starting getTelemetry collection")
 
-    -- -- SUPER HACK!!! use the SI client to select the frequencies, then reflect them 
-    -- -- back into the output until we figure out how to read the aircraft radios!
-    -- local siout = simapi.fetch_output(json, simapi_output_file)
+    -- no longer a hack, we need to legitimately support when the SI client 
+    -- updates the data. for example, clicking the freq in the client, or 
+    -- asking the AI copilot to handle the frequencies.
+    local siout = simapi.fetch_output(json, simapi_output_file)
 
         -- ===== REQUIRED VARIABLES =====
 
@@ -56,10 +63,16 @@ local function getTelemetry()
     -- we can only support VHF, so let's use COM1 only (UHF not supported yet)
 
     local dev = GetDevice(38) -- COMM 2 (VHF) device ID for F-16C
-    local freq = dev:get_frequency()
+    
+    -- if we got a set radio command from the SI client, set it in the sim before we read it.
+    if siout["COM_RADIO_SET_HZ"] then
+        dev:set_frequency( siout["COM_RADIO_SET_HZ"] )  -- in Hz
+    end
 
+    local freq = roundTo833(dev:get_frequency())
 
-    var_data["COM ACTIVE FREQUENCY:1"] = freq / 1e6
+   
+    var_data["COM ACTIVE FREQUENCY:1"] = (freq / 1e6)
     -- siout["COM_RADIO_SET_HZ"] / 1000000     -- (FLOAT) The current value of the COM1 Active Frequency, in MHz.  Example value:  118.32
     
     -- enable COM1 for RX and TX

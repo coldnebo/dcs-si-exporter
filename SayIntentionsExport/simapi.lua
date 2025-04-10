@@ -124,8 +124,15 @@ function simapi.fetch_output(json, output_file)
             end
         end
     end
-
     file:close()
+
+	-- Step 2: Truncate the file (clears it)
+    local clear_file, cerr = io.open(output_file, "w")
+    if not clear_file then
+        error("Failed to clear file: " .. tostring(cerr))
+    end
+    clear_file:close()
+
     return data
 end
 

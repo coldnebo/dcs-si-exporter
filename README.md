@@ -13,37 +13,115 @@ AMAZING!!!
 
 Work in Progress
 
-UPDATE - I figured out how to read the VHF frequency in the F16C. but each plane is different.
-Still, for now that means I don't need the "super-hack" anymore.
-
-HACK in Progress -- I have a super hack, which is to read the frequencies from the SI client
-and write them back out to the simAPI_input.json until I can source them properly from the
-sim.
-
 
 ### MVP Requirements
 
-The following simAPI values are hardcoded currently because I can't find a good source for 
-them.  Unfortunately they are the most important required fields from the simAPI specification. 
-SayIntentions won't really work without them being dynamic.
+Features and Current Status:
 
-```lua
-var_data["COM ACTIVE FREQUENCY:1"] = 124.0
-var_data["COM ACTIVE FREQUENCY:2"] = 127.5
-var_data["COM RECEIVE:1"] = 1
-var_data["COM RECEIVE:2"] = 0
-var_data["COM TRANSMIT:1"] = 1
-var_data["COM TRANSMIT:2"] = 0
-var_data["ENGINE TYPE"] = 1 -- Jet
-var_data["MAGVAR"] = 0 -- Placeholder
-var_data["TRANSPONDER CODE:1"] = 1200
-var_data["TRANSPONDER STATE:1"] = 1
+* implement [SayIntensions simAPI](https://sayintentionsai.freshdesk.com/support/solutions/articles/154000221017-simapi-developer-howto-integrating-sayintentions-ai-with-any-flight-simulator)
+  * simAPI_input.json - input to the SayIntentions client from this exporter
+    * [DONE] setup default structure, required and optional parameters and types
+  * simAPI_output.jsonl - output from the SayIntensions client to this exporter (append on update)
+  	* [INPROGRESS] clear after read
+
+
+
+ ### Input Data
+
+* All required fields implemented or hardcoded for now.
+* only COM1 supported in the F-16C currently
+* only VHF radio mapped to COM1
+* COM2 disabled
+* transponder hardcoded to 1200, and ALT (mode-c) on.
+
+* [TODO] Optional fields?
+  * `ZULU TIME` and `LOCAL TIME` maybe from mission data?
+
+* `COM ACTIVE FREQUENCY:1` 
+  * support 8.333KHz channel spacing
+  * read from F-16C (different aircraft will require different device access)
+  * [TODO] read from other aircraft
+  * [DONE] support being set by SI client -- this requires the incremental read feature.
+
+* `MAGVAR`
+	* hardcoded for now
+	* [TODO] lookup current map in DCS and apply magvar average?? or find other source?
+
+* `PLANE ALT ABOVE GROUND MINUS CG`
+  * F-16C seems to be 5 feet above the ground when on the ground so hard-coded offset -5.
+  * [TODO] per plane map of offsets? some other way to determine `SIM_ON_GROUND` ?
+
+* `SEA LEVEL PRESSURE`
+	* hardcoded to 29.92 for now.
+	* [TODO] read from mission data? 
+
+* `TRANSPONDER CODE:1`
+  * hardcoded to 1200 for now
+  * [TODO] read from F-16C
+  * [TODO] lookup for other aircraft
+
+* `TRANSPONDER IDENT` - NA
+  * [TODO] implement? not sure where this equivalent function is in the F-16C?
+
+* `TRANSPONDER STATE:1` 
+	* hardcoded to 4 (ALT ON, mode C)
+	* [TODO] implement other modes? this is a nice to have, but probably OFF and ALT make sense.
+	         others may not have equivalents in F-16C? 
+	         0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
+
+example
+
+```json
+{
+    "sim": {
+        "adapter_version": "0.1",
+        "exe": "DCS.exe",
+        "name": "DCS World",
+        "simapi_version": "1.0",
+        "variables": {
+            "AIRSPEED INDICATED": 4,
+            "AIRSPEED TRUE": 0,
+            "AMBIENT WIND DIRECTION": 0,
+            "AMBIENT WIND VELOCITY": 0,
+            "CIRCUIT COM ON:1": 1,
+            "CIRCUIT COM ON:2": 1,
+            "COM ACTIVE FREQUENCY:1": 121.5,
+            "COM ACTIVE FREQUENCY:2": 100,
+            "COM RECEIVE:1": 1,
+            "COM RECEIVE:2": 0,
+            "COM TRANSMIT:1": 1,
+            "COM TRANSMIT:2": 0,
+            "ELECTRICAL MASTER BATTERY:0": 1,
+            "ENGINE TYPE": 1,
+            "INDICATED ALTITUDE": 1847,
+            "LOCAL TIME": 0,
+            "MAGNETIC COMPASS": 298.70238827001,
+            "MAGVAR": -11.5,
+            "PLANE ALT ABOVE GROUND MINUS CG": 0,
+            "PLANE ALTITUDE": 5,
+            "PLANE BANK DEGREES": -0.05713413220076,
+            "PLANE HEADING DEGREES TRUE": 310.20238827001,
+            "PLANE LATITUDE": 36.222370040957,
+            "PLANE LONGITUDE": -115.03966501124,
+            "PLANE PITCH DEGREES": 0.46066013421995,
+            "PLANE TOUCHDOWN LATITUDE": 0,
+            "PLANE TOUCHDOWN LONGITUDE": 0,
+            "PLANE TOUCHDOWN NORMAL VELOCITY": 0,
+            "SEA LEVEL PRESSURE": 2992,
+            "SIM ON GROUND": 1,
+            "TOTAL WEIGHT": 10000,
+            "TRANSPONDER CODE:1": 1200,
+            "TRANSPONDER IDENT": 0,
+            "TRANSPONDER STATE:1": 4,
+            "TYPICAL DESCENT RATE": 2000,
+            "VERTICAL SPEED": -1,
+            "WHEEL RPM:1": 0,
+            "ZULU TIME": 0
+        },
+        "version": "2.9"
+    }
+}
 ```
-
-The most likely source is [DCS-SimpleRadioStandalone](https://github.com/ciribob/DCS-SimpleRadioStandalone/), however the API is GPL 3.0, so we can't just copy from it. Another alternative is to use it, but I can't 
-find any exported API from SRS for other mods to use.
-
-I'm still looking for other ways to source this information.
 
 
 ## Package Files
