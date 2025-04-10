@@ -48,7 +48,6 @@ local function roundTo833(freq)
     return math.floor(freq / spacing + 0.5) * spacing
 end
 
-local xpdr = 1200
 
 log_marker("defining getTelemetry()")
 local function getTelemetry()
@@ -70,8 +69,8 @@ local function getTelemetry()
 
     var_data["AIRSPEED INDICATED"] = math.floor(LoGetIndicatedAirSpeed() * 1.94384) -- m/s to knots
     
+    -- FREQUENCY read/write
     -- we can only support VHF, so let's use COM1 only (UHF not supported yet)
-
     local dev = GetDevice(38) -- COMM 2 (VHF) device ID for F-16C
     
     -- if we got a set radio command from the SI client, set it in the sim before we read it.
@@ -79,11 +78,23 @@ local function getTelemetry()
         dev:set_frequency( siout["COM_RADIO_SET_HZ"] )  -- in Hz
     end
 
+    local freq = roundTo833(dev:get_frequency())
+
+
+    -- TRANSPONDER read/write
+
+    -- mod 3 transponder ID for F-16C
+    local digit1 = math.floor(GetDevice(0):get_argument_value(546) * 10 + 0.5)
+    local digit2 = math.floor(GetDevice(0):get_argument_value(548) * 10 + 0.5)
+    local digit3 = math.floor(GetDevice(0):get_argument_value(550) * 10 + 0.5)
+    local digit4 = math.floor(GetDevice(0):get_argument_value(552) * 10 + 0.5)
+
+    local xpdr = digit1 * 1000 + digit2 * 100 + digit3 * 10 + digit4 * 1
+
     if siout["XPNDR_SET"] then 
         xpdr = math.floor(tonumber(siout["XPNDR_SET"])) 
     end
 
-    local freq = roundTo833(dev:get_frequency())
 
    
     var_data["COM ACTIVE FREQUENCY:1"] = (freq / 1e6)

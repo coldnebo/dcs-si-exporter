@@ -32,7 +32,7 @@ Features and Current Status:
 * only COM1 supported in the F-16C currently
 * only VHF radio mapped to COM1
 * COM2 disabled
-* transponder hardcoded to 1200, and ALT (mode-c) on.
+* transponder now supported in the F-16C, and hardcoded ALT (mode-c) on.
 
 * [TODO] Optional fields?
   * `ZULU TIME` and `LOCAL TIME` maybe from mission data?
@@ -57,7 +57,7 @@ Features and Current Status:
 
 * `TRANSPONDER CODE:1`
   * hardcoded to 1200 for now
-  * [TODO] read from F-16C
+  * [DONE] read from F-16C
   * [TODO] lookup for other aircraft
   * can be hacked by writing `{"setvar":"XPNDR_SET","value":"1114"}` into simAPI_output.jsonl
 
