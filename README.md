@@ -13,6 +13,9 @@ AMAZING!!!
 
 Work in Progress
 
+UPDATE - I figured out how to read the VHF frequency in the F16C. but each plane is different.
+Still, for now that means I don't need the "super-hack" anymore.
+
 HACK in Progress -- I have a super hack, which is to read the frequencies from the SI client
 and write them back out to the simAPI_input.json until I can source them properly from the
 sim.
