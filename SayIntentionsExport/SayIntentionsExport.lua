@@ -8,6 +8,15 @@ local simapi_output_file = sayintentions_path .. "simAPI_output.jsonl"
 local simapi_debug_file = sayintentions_path .. "dcs-si-exporter_debug.txt"
 
 
+
+-- clear debug log on start
+local clear_file, cerr = io.open(simapi_debug_file, "w")
+if not clear_file then
+    error("Failed to clear file: " .. tostring(cerr))
+end
+clear_file:close()
+
+
 local function log_marker(msg)
     local log = io.open(simapi_debug_file, "a")
     log:write("dcs-si-exporter: [" .. msg .. "] reached at " .. os.date() .. "\n")
@@ -46,7 +55,7 @@ local function getTelemetry()
     local data, var_data, sim_data
     data, var_data, sim_data = simapi.default_input()
 
-    log_marker("starting getTelemetry collection")
+    --log_marker("starting getTelemetry collection")
 
     -- no longer a hack, we need to legitimately support when the SI client 
     -- updates the data. for example, clicking the freq in the client, or 
@@ -122,7 +131,7 @@ local function getTelemetry()
     var_data["ENGINE TYPE"] = 1           -- hardcode as a jet for now          -- (INT) Engine type, as an integer. 0 = Piston, 1 = Jet, 2 = None, 3 = Helo(Bell) turbine, 4 = Unsupported, 5 = Turboprop
 
 
-    log_marker("finished getTelemetry data collection")
+    --log_marker("finished getTelemetry data collection")
     return data
 end
 
@@ -130,7 +139,7 @@ end
 
 log_marker("defining SayIntentionsExport")
 function SayIntentionsExport()
-    log_marker("getTelemetry() called")
+    --log_marker("getTelemetry() called")
     local ok, telemetry = pcall(getTelemetry)
 
     if not ok then
@@ -138,7 +147,7 @@ function SayIntentionsExport()
         return
     end
     
-    log_marker("writing telemetry")
+    --log_marker("writing telemetry")
     local file = io.open(simapi_input_file, "w")
     if file then
         file:write(json.encode(telemetry))
