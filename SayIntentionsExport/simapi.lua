@@ -72,7 +72,7 @@ function simapi.default_input()
 	var_data["ELECTRICAL MASTER BATTERY:0"] = 1  	-- (INT) If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the airplane electrical master switch is on or off. Possible values are 1 or 0.
 
 	var_data["TRANSPONDER IDENT"] = 0 				-- (INT) Indicates whether the transponder is currently in "IDENT" mode. Possible values are 1 or 0.
-	var_data["TRANSPONDER STATE:1"] = 0 			-- (INT) Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
+	var_data["TRANSPONDER STATE:1"] = 4 			-- (INT) Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
 
 	-- OPTIONAL:TELEMETRY
 
@@ -88,7 +88,7 @@ function simapi.default_input()
 
 	-- OPTIONAL:AIRCRAFT DETAILS
 
-	var_data["TYPICAL DESCENT RATE"] = 1000 		-- (INT) The typical descent rate of the aircraft being flown. This is used for TOD calculations. This field is optional, and if left blank, a value of 1000fpm will be assumed.
+	var_data["TYPICAL DESCENT RATE"] = 2000 		-- (INT) The typical descent rate of the aircraft being flown. This is used for TOD calculations. This field is optional, and if left blank, a value of 1000fpm will be assumed.
 
 
 	-- SIM Data
