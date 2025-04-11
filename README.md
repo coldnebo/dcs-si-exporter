@@ -24,15 +24,19 @@ Features and Current Status:
   * simAPI_output.jsonl - output from the SayIntensions client to this exporter (append on update)
   	* [INPROGRESS] clear after read
 
+* Aircraft Supported
+  * `F-16C_50`
+  * `FA-18C_hornet`
 
 
  ### Input Data
 
 * All required fields implemented or hardcoded for now.
-* only COM1 supported in the F-16C currently
+* only COM1 supported 
 * only VHF radio mapped to COM1
 * COM2 disabled
-* transponder now supported in the F-16C, and hardcoded ALT (mode-c) on.
+* transponder mode3 code now supported and hardcoded ALT on.
+
 
 * [TODO] Optional fields?
   * `ZULU TIME` and `LOCAL TIME` maybe from mission data?

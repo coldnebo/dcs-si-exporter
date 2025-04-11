@@ -40,14 +40,10 @@ log_marker("top of file")
 local lfs = safe_require("lfs")
 local json = safe_require("dkjson")
 local simapi = safe_require("simapi")
+local aircraft_api = safe_require("aircraftapi")
 
-
--- support 8.333kHz channel spacing
-local function roundTo833(freq)
-    local spacing = 25e3 / 3  -- equals 8333.333...
-    return math.floor(freq / spacing + 0.5) * spacing
-end
-
+-- persist xpdr between telemetry calls
+local xpdr
 
 log_marker("defining getTelemetry()")
 local function getTelemetry()
@@ -69,32 +65,24 @@ local function getTelemetry()
 
     var_data["AIRSPEED INDICATED"] = math.floor(LoGetIndicatedAirSpeed() * 1.94384) -- m/s to knots
     
-    -- FREQUENCY read/write
-    -- we can only support VHF, so let's use COM1 only (UHF not supported yet)
-    local dev = GetDevice(38) -- COMM 2 (VHF) device ID for F-16C
+
+    -- identify the unit name/type    
+    local aircraft_type = LoGetSelfData().Name
     
-    -- if we got a set radio command from the SI client, set it in the sim before we read it.
+    -- VHF read/write 
+    -- we can only support VHF, so let's use COM1 only (UHF not supported yet)    
     if siout["COM_RADIO_SET_HZ"] then
-        dev:set_frequency( siout["COM_RADIO_SET_HZ"] )  -- in Hz
+        aircraft_api.set_vhf_frequency(aircraft_type, siout["COM_RADIO_SET_HZ"])
     end
-
-    local freq = roundTo833(dev:get_frequency())
-
+    local freq = aircraft_api.get_vhf_frequency(aircraft_type)
 
     -- TRANSPONDER read/write
-
-    -- mod 3 transponder ID for F-16C
-    local digit1 = math.floor(GetDevice(0):get_argument_value(546) * 10 + 0.5)
-    local digit2 = math.floor(GetDevice(0):get_argument_value(548) * 10 + 0.5)
-    local digit3 = math.floor(GetDevice(0):get_argument_value(550) * 10 + 0.5)
-    local digit4 = math.floor(GetDevice(0):get_argument_value(552) * 10 + 0.5)
-
-    local xpdr = digit1 * 1000 + digit2 * 100 + digit3 * 10 + digit4 * 1
-
     if siout["XPNDR_SET"] then 
-        xpdr = math.floor(tonumber(siout["XPNDR_SET"])) 
+        aircraft_api.set_mode3_code(aircraft_type, siout["XPNDR_SET"])
     end
-
+    -- transponder code is only visible in FA18 when setting it in the UFC, so we have to hoist this and
+    -- persist it.
+    xpdr = aircraft_api.get_mode3_code(aircraft_type) or xpdr
 
    
     var_data["COM ACTIVE FREQUENCY:1"] = (freq / 1e6)
@@ -110,7 +98,7 @@ local function getTelemetry()
     -- math.floor(var_data["PLANE HEADING DEGREES TRUE"] - var_data["MAGNETIC COMPASS"])     -- (INT) The magnetic variation at the current position of the aircraft. This will be added to the current heading to get a true heading, thus negative numbers may be used where appropriate. Example value:  -12
 
     var_data["MAGNETIC COMPASS"] = math.deg(yaw) + var_data["MAGVAR"] -- rad to deg + magvar                -- (INT) The indicated heading, in degrees
-    var_data["TRANSPONDER CODE:1"] =  xpdr              -- (INT) The currently indicated 4-digit transponder code.  (Example: 2543)
+    var_data["TRANSPONDER CODE:1"] = xpdr              -- (INT) The currently indicated 4-digit transponder code.  (Example: 2543)
 
     
     -- REQUIRED:TELEMETRY
