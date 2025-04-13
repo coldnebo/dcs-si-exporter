@@ -1,3 +1,27 @@
+    -- SayIntentions Digital Combat Simulator exporter
+
+    -- Copyright (C) 2025  Larry Kyrala
+
+    -- This program is free software: you can redistribute it and/or modify
+    -- it under the terms of the GNU General Public License as published by
+    -- the Free Software Foundation, either version 3 of the License, or
+    -- (at your option) any later version.
+
+    -- This program is distributed in the hope that it will be useful,
+    -- but WITHOUT ANY WARRANTY; without even the implied warranty of
+    -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    -- GNU General Public License for more details.
+
+    -- You should have received a copy of the GNU General Public License
+    -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+-- Portions of this code adapted from [Project Name]
+-- Source: https://github.com/ciribob/DCS-SimpleRadioStandalone (GPLv3)
+-- Original Author(s): [Ciaran Fisher], if known
+-- Adapted by: [Larry Kyrala] for [dcs-si-exporter]
+
+
 local aircraft_api = {}
 
 -- F-16C_50
