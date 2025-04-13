@@ -16,10 +16,10 @@
     -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
--- Portions of this code adapted from [Project Name]
+-- Portions of this code adapted from DCS SimpleRadioStandalone (SRS) http://dcssimpleradio.com/
 -- Source: https://github.com/ciribob/DCS-SimpleRadioStandalone (GPLv3)
--- Original Author(s): [Ciaran Fisher], if known
--- Adapted by: [Larry Kyrala] for [dcs-si-exporter]
+-- Original Author(s): Ciaran Fisher
+-- Adapted by: Larry Kyrala for dcs-si-exporter
 
 
 local aircraft_api = {}
