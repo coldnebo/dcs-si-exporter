@@ -85,9 +85,14 @@ function aircraft_api.get_mode3_code(aircraft_type)
 
 	elseif aircraft_type == "FA-18C_hornet" then 
 
+		-- heh. this is complete madness in terms of an api, but here we are.
+		-- kudos to SRS and DCS-BIOS for figuring this out!
+		-- I suspect that ED has another field much easier to access somewhere in their 
+		-- internal API, but it might not even be exposed to lua.
 		local ufc_raw = list_indication(6)
 		local _ufc = {}
 
+		-- stream parsing our way to glory!
 		local ufc_match = ufc_raw:gmatch("-----------------------------------------\n([^\n]+)\n([^\n]*)\n")
 	    while true do
 	        local Key, Value = ufc_match()
@@ -97,6 +102,8 @@ function aircraft_api.get_mode3_code(aircraft_type)
 	        _ufc[Key] = Value
 	    end
 
+	    -- hacking the virtual display output to grab temporary state reminds me of 
+	    -- hacking redstone computers in minecraft...
 		if _ufc then
 			local scratchpad = _ufc.UFC_ScratchPadString1Display .. _ufc.UFC_ScratchPadString2Display
 			

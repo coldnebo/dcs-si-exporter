@@ -175,9 +175,9 @@ New-Item -ItemType SymbolicLink -Path "%UserProfile%\Saved Games\DCS.openbeta\Sc
 
 ## License
 
-`SayIntentionsExport.lua` is released via the [GPLv3 License here](./LICENSE).
+`SayIntentionsExport.lua` is released via the [GPLv3 License here](./SayIntentionsExport/dcs-si-exporter-LICENSE.txt).  This is now included with the redistribution zip.
 
-2025-04-13 Why did you change your license?
+* 2025-04-13 Why did you change your license?
 
 Because while I did not copy code verbatim from the DCS SRS project, there were several times I did deep 
 dives into that project to understand the low level apis in DCS, so I want to more formally credit Ciran Fisher
