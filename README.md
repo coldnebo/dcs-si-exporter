@@ -173,6 +173,26 @@ New-Item -ItemType SymbolicLink -Path "%UserProfile%\Saved Games\DCS.openbeta\Sc
 ```
 
 
+## Thank You
+
+Thanks to SRS, DCS-BIOS and MOOSE for their projects.
+
+[DCS Simple Radio Standalone](https://github.com/ciribob/DCS-SimpleRadioStandalone) provided insight as to 
+how to dig into DCS structures. I directly adapted some of the details in the aircraftapi and reference 
+that project in the License below.
+
+I haven't used the following directly for implementation, but they are on the short list of must-have 
+resources for DCS programming:
+
+[DCS-BIOS](https://github.com/DCS-Skunkworks/dcs-bios) because they 
+are a key source in many of the SRS files.  I haven't used their debugging and exploration tool yet, but 
+I am convinced that it is probably the only way to systematically explore and reverse engineer the internal
+apis in DCS.
+
+[MOOSE](https://github.com/FlightControl-Master/MOOSE) has information that has been helpful.
+
+
+
 ## License
 
 `SayIntentionsExport.lua` is released via the [GPLv3 License here](./SayIntentionsExport/dcs-si-exporter-LICENSE.txt).  This is now included with the redistribution zip.
@@ -183,10 +203,6 @@ Because while I did not copy code verbatim from the DCS SRS project, there were 
 dives into that project to understand the low level apis in DCS, so I want to more formally credit Ciran Fisher
 and the contributors to SRS for their hard work.
 
-I am also aware of and want to shout out [DCS-BIOS](https://github.com/DCS-Skunkworks/dcs-bios) because they 
-are a key source in many of the SRS files.  I haven't used their debugging and exploration tool yet, but 
-I am convinced that it is probably the only way to systematically explore and reverse engineer the internal
-apis in DCS.
 
 ### dkjson
 
@@ -206,6 +222,10 @@ not copy code from that project, I did discover data structures and access from 
 Ciaran Fisher for the hard work in discovering those undocumented APIs from various other people in the DCS community. 
 
 For example, I never would have figured out how to read the F/A-18 scratchpad for the mode3 IFF transponder code
-as quickly. This saved a large amount of trial and error, so I changed my license to match his.
+as quickly. This saved a large amount of trial and error, so I changed my license to match his and reference
+where I adapted code from that project for `aircraftapi.lua`.
 
 * https://github.com/ciribob/DCS-SimpleRadioStandalone
+
+
+

@@ -59,9 +59,13 @@ local lfs = safe_require("lfs")
 local json = safe_require("dkjson")
 local simapi = safe_require("simapi")
 local aircraft_api = safe_require("aircraftapi")
+local mapapi = safe_require("mapapi")
 
 -- persist xpdr between telemetry calls
 local xpdr
+
+
+
 
 log_marker("defining getTelemetry()")
 local function getTelemetry()
@@ -112,10 +116,8 @@ local function getTelemetry()
     
     var_data["INDICATED ALTITUDE"] = math.floor(LoGetSelfData().LatLongAlt.Alt * 3.28084)  -- meters to feet  -- math.floor(LoGetAltitudeAboveSeaLevel() * 3.28084)    -- meters to feet
 
-    var_data["MAGVAR"] = -11.5 -- hardcoded for Nevada. can't find this information?
-    -- math.floor(var_data["PLANE HEADING DEGREES TRUE"] - var_data["MAGNETIC COMPASS"])     -- (INT) The magnetic variation at the current position of the aircraft. This will be added to the current heading to get a true heading, thus negative numbers may be used where appropriate. Example value:  -12
 
-    var_data["MAGNETIC COMPASS"] = math.deg(yaw) + var_data["MAGVAR"] -- rad to deg + magvar                -- (INT) The indicated heading, in degrees
+
     var_data["TRANSPONDER CODE:1"] = xpdr              -- (INT) The currently indicated 4-digit transponder code.  (Example: 2543)
 
     
@@ -131,6 +133,13 @@ local function getTelemetry()
     var_data["PLANE LONGITUDE"] = LoGetSelfData().LatLongAlt.Long              -- (FLOAT) Current longitude of the airplane, as a decimal.
     var_data["PLANE PITCH DEGREES"] = math.deg(pitch)  -- rad to deg            -- (INT) Current pitch angle of the airplane, in degrees, as a positive or number number. Example:  -15 indicates a 15-degree downward pitch.
 
+    local lat = var_data["PLANE LATITUDE"]
+    local long = var_data["PLANE LONGITUDE"]
+    --log_marker("lat/long " .. lat .. " , " .. long)
+
+    var_data["MAGVAR"] = mapapi.getMagVarByLocation(lat, long)     -- (INT) The magnetic variation at the current position of the aircraft. This will be added to the current heading to get a true heading, thus negative numbers may be used where appropriate. Example value:  -12
+    var_data["MAGNETIC COMPASS"] = math.deg(yaw) + var_data["MAGVAR"] -- rad to deg + magvar                -- (INT) The indicated heading, in degrees
+    
 
     var_data["SEA LEVEL PRESSURE"] = 2992    -- inMG standard. can't get a good read on this either? mission data?
     -- math.floor(seaLevelPressure * 0.02953 * 100.0) -- millibars to inHG * 100              -- (INT) Current barometric pressure, measured in inHG. Example:  2991
