@@ -27,6 +27,7 @@ Features and Current Status:
 * Aircraft Supported
   * `F-16C_50`
   * `FA-18C_hornet`
+  * `F-5E-3`
 
 
  ### Input Data

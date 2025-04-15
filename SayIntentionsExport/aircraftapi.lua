@@ -26,6 +26,7 @@ local aircraft_api = {}
 
 -- F-16C_50
 -- FA-18C_hornet
+-- F-5E-3
 
 local sayintentions_path = os.getenv("LOCALAPPDATA") .. "\\SayIntentionsAI\\"
 local simapi_debug_file = sayintentions_path .. "dcs-si-exporter_debug.txt"
@@ -54,6 +55,9 @@ function aircraft_api.get_vhf_frequency(aircraft_type)
 	elseif aircraft_type == "FA-18C_hornet" then 
 		dev = GetDevice(38) -- COMM 2 (VHF) device ID
 		frequency = roundTo833(dev:get_frequency())
+	elseif aircraft_type == "F-5E-3" then
+		dev = GetDevice(23) -- COMM 2 (VHF) device ID
+		frequency = roundTo833(dev:get_frequency())
 	end
 
 	return frequency
@@ -62,11 +66,15 @@ end
 
 function aircraft_api.set_vhf_frequency(aircraft_type, frequency)
 	local dev -- device for VHF
+
 	if aircraft_type == "F-16C_50" then
 		dev = GetDevice(38) -- COMM 2 (VHF) device ID
 		dev:set_frequency( frequency )
 	elseif aircraft_type == "FA-18C_hornet" then 
 		dev = GetDevice(38) -- COMM 2 (VHF) device ID
+		dev:set_frequency( frequency )
+	elseif aircraft_type == "F-5E-3" then
+		dev = GetDevice(23) -- COMM 2 (VHF) device ID
 		dev:set_frequency( frequency )
 	end
 end
@@ -80,6 +88,15 @@ function aircraft_api.get_mode3_code(aircraft_type)
 	    local digit2 = math.floor(GetDevice(0):get_argument_value(548) * 10 + 0.5)
 	    local digit3 = math.floor(GetDevice(0):get_argument_value(550) * 10 + 0.5)
 	    local digit4 = math.floor(GetDevice(0):get_argument_value(552) * 10 + 0.5)
+
+	    xpdr = digit1 * 1000 + digit2 * 100 + digit3 * 10 + digit4 * 1
+
+	elseif aircraft_type == "F-5E-3" then
+
+	    local digit1 = math.floor(GetDevice(0):get_argument_value(211) * 10 + 0.5)
+	    local digit2 = math.floor(GetDevice(0):get_argument_value(212) * 10 + 0.5)
+	    local digit3 = math.floor(GetDevice(0):get_argument_value(213) * 10 + 0.5)
+	    local digit4 = math.floor(GetDevice(0):get_argument_value(214) * 10 + 0.5)
 
 	    xpdr = digit1 * 1000 + digit2 * 100 + digit3 * 10 + digit4 * 1
 
