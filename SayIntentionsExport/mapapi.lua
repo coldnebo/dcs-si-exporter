@@ -26,27 +26,27 @@ function mapapi.getMagVarByLocation(lat, lon)
     local mapZones = {
         {
             name = "Caucasus",
-            latMin = 41.0, latMax = 47.0,
-            lonMin = 37.0, lonMax = 47.0,
-            magvar = -8
+            latMin = 38.865556, latMax = 48.383333,
+            lonMin = 26.785833, lonMax = 49.271111,
+            magvar = -7
         },
         {
             name = "Persian Gulf",
-            latMin = 23.0, latMax = 28.5,
-            lonMin = 53.0, lonMax = 58.0,
-            magvar = -4
+            latMin = 21.869722, latMax = 32.9575,
+            lonMin = 46.607222, lonMax = 63.991667,
+            magvar = -3
         },
         {
             name = "Nevada",
-            latMin = 35.0, latMax = 38.5,
-            lonMin = -117.5, lonMax = -113.0,
+            latMin = 34.346944, latMax = 39.801667,
+            lonMin = -119.986944, lonMax = -112.448889,
             magvar = -11.5
         },
         {
             name = "Marianas",
-            latMin = 13.0, latMax = 21.0,
-            lonMin = 142.0, lonMax = 146.0,
-            magvar = -3
+            latMin = 10.739167, latMax = 22.214722,
+            lonMin = 136.9675, lonMax = 152.118056,
+            magvar = -2
         }
     }
 
