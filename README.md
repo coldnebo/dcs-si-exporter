@@ -158,7 +158,17 @@ pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayI
 
 * startup DCS, choose an aircraft and a starting location (i.e. Nellis, Nevada)
 
+* once the simulation is running you should see the following files in the following locations which
+  will let you know the program is running:
+
+  * `%LOCALAPPDATA%\SayIntentionsAI\dcs-si-exporter_debug.txt`
+  * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_input.json`
+
+  you can check the `dcs-si-exporter_debug.txt` for any errors if things seem to not be working.
+
 * startup the SayIntentions.ai client application.
+
+  * you should additionally see `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl` appear.
 
 
 ## Development
