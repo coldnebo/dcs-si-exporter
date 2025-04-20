@@ -60,6 +60,7 @@ local json = safe_require("dkjson")
 local simapi = safe_require("simapi")
 local aircraft_api = safe_require("aircraftapi")
 local mapapi = safe_require("mapapi")
+local weather = require("realweatherapi")
 
 -- persist xpdr between telemetry calls
 local xpdr
@@ -141,7 +142,18 @@ local function getTelemetry()
     var_data["MAGNETIC COMPASS"] = math.deg(yaw) + var_data["MAGVAR"] -- rad to deg + magvar                -- (INT) The indicated heading, in degrees
     
 
-    var_data["SEA LEVEL PRESSURE"] = 2992    -- inMG standard. can't get a good read on this either? mission data?
+    
+
+    local pressure, err = weather.get_pressure()
+    if pressure then
+        --log_marker("Pressure * 100 (inHg x100):" .. pressure)
+    else
+        pressure = 2992
+        --log_marker("Error:" .. err)
+    end
+
+
+    var_data["SEA LEVEL PRESSURE"] = pressure    -- inMG standard. can't get a good read on this either? mission data?
     -- math.floor(seaLevelPressure * 0.02953 * 100.0) -- millibars to inHG * 100              -- (INT) Current barometric pressure, measured in inHG. Example:  2991
     
     var_data["SIM ON GROUND"] = var_data["PLANE ALT ABOVE GROUND MINUS CG"] <= 1 and 1 or 0                   -- (INT) Indicates whether or not the aircraft is currently on the ground. Possible values are 1 or 0.

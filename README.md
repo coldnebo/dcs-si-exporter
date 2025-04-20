@@ -59,6 +59,7 @@ Features and Current Status:
 * `SEA LEVEL PRESSURE`
 	* hardcoded to 29.92 for now.
 	* [TODO] read from mission data? 
+  * Reading from [DCS Real Weather mod](https://github.com/evogelsa/dcs-real-weather)
 
 * `TRANSPONDER CODE:1`
   * hardcoded to 1200 for now
@@ -169,6 +170,16 @@ pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayI
 * startup the SayIntentions.ai client application.
 
   * you should additionally see `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl` appear.
+
+### Optional
+
+If you have the [DCS RealWeather](https://github.com/evogelsa/dcs-real-weather) tool, you can 
+generate a mission using real weather. Follow the directions in that project to install and 
+setup your directory. Then look it the file `realweatherapi.lua` and set the directory for 
+the `realweather.log` to wherever you installed it. 
+
+This will allow ATC to report real world baro pressure.
+
 
 
 ## Development
