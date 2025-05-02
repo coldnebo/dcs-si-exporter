@@ -92,9 +92,9 @@ SayIntentionsExport\
 
 4. in the `Scripts` folder, find your `Export.lua` file and add the following line to the end of the file:
 
-```lua
-pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayIntentionsExport/SayIntentionsExport.lua"); end,nil)
-```
+    ```lua
+    pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayIntentionsExport/SayIntentionsExport.lua"); end,nil)
+    ```
 
 5. startup DCS, choose an aircraft and a starting location (i.e. F-16, Nellis, Nevada)
 
