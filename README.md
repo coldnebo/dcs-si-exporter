@@ -44,31 +44,25 @@ Features and Current Status:
 
 * `COM ACTIVE FREQUENCY:1` 
   * support 8.333KHz channel spacing
-  * read from F-16C (different aircraft will require different device access)
-  * [TODO] read from other aircraft
-  * [DONE] support being set by SI client -- this requires the incremental read feature.
+  * read from supported aircraft
 
 * `MAGVAR`
-	* hardcoded for now
-	* [TODO] lookup current map in DCS and apply magvar average?? or find other source?
+  * looked up average per map. see `mapapi.lua`.
 
 * `PLANE ALT ABOVE GROUND MINUS CG`
   * F-16C seems to be 5 feet above the ground when on the ground so hard-coded offset -5.
   * [TODO] per plane map of offsets? some other way to determine `SIM_ON_GROUND` ?
 
 * `SEA LEVEL PRESSURE`
-	* hardcoded to 29.92 for now.
-	* [TODO] read from mission data? 
-  * Reading from [DCS Real Weather mod](https://github.com/evogelsa/dcs-real-weather)
+  * [OPTIONAL] Reading from [DCS Real Weather mod](https://github.com/evogelsa/dcs-real-weather)
+  * defaults to 29.92 if not using real-weather.
 
 * `TRANSPONDER CODE:1`
-  * hardcoded to 1200 for now
-  * [DONE] read from F-16C
-  * [TODO] lookup for other aircraft
-  * can be hacked by writing `{"setvar":"XPNDR_SET","value":"1114"}` into simAPI_output.jsonl
+  * can be set from SayIntentions Client by clicking on frequencies
+  * read from supported aircraft
 
 * `TRANSPONDER IDENT` - NA
-  * [TODO] implement? not sure where this equivalent function is in the F-16C?
+  * [TODO] implement? not sure where this function is in various aircraft?
 
 * `TRANSPONDER STATE:1` 
 	* hardcoded to 4 (ALT ON, mode C)
@@ -86,13 +80,13 @@ example
         "name": "DCS World",
         "simapi_version": "1.0",
         "variables": {
-            "AIRSPEED INDICATED": 4,
+            "AIRSPEED INDICATED": 0,
             "AIRSPEED TRUE": 0,
             "AMBIENT WIND DIRECTION": 0,
             "AMBIENT WIND VELOCITY": 0,
             "CIRCUIT COM ON:1": 1,
             "CIRCUIT COM ON:2": 1,
-            "COM ACTIVE FREQUENCY:1": 121.5,
+            "COM ACTIVE FREQUENCY:1": 305,
             "COM ACTIVE FREQUENCY:2": 100,
             "COM RECEIVE:1": 1,
             "COM RECEIVE:2": 0,
@@ -100,28 +94,28 @@ example
             "COM TRANSMIT:2": 0,
             "ELECTRICAL MASTER BATTERY:0": 1,
             "ENGINE TYPE": 1,
-            "INDICATED ALTITUDE": 1847,
+            "INDICATED ALTITUDE": 1863,
             "LOCAL TIME": 0,
-            "MAGNETIC COMPASS": 298.70238827001,
+            "MAGNETIC COMPASS": 347.76334466074,
             "MAGVAR": -11.5,
             "PLANE ALT ABOVE GROUND MINUS CG": 0,
             "PLANE ALTITUDE": 5,
-            "PLANE BANK DEGREES": -0.05713413220076,
-            "PLANE HEADING DEGREES TRUE": 310.20238827001,
-            "PLANE LATITUDE": 36.222370040957,
-            "PLANE LONGITUDE": -115.03966501124,
-            "PLANE PITCH DEGREES": 0.46066013421995,
+            "PLANE BANK DEGREES": 0.028837929124707,
+            "PLANE HEADING DEGREES TRUE": 359.26334466074,
+            "PLANE LATITUDE": 36.245992971049,
+            "PLANE LONGITUDE": -115.03428511504,
+            "PLANE PITCH DEGREES": -0.66272188930467,
             "PLANE TOUCHDOWN LATITUDE": 0,
             "PLANE TOUCHDOWN LONGITUDE": 0,
             "PLANE TOUCHDOWN NORMAL VELOCITY": 0,
-            "SEA LEVEL PRESSURE": 2992,
+            "SEA LEVEL PRESSURE": 2989,
             "SIM ON GROUND": 1,
-            "TOTAL WEIGHT": 10000,
-            "TRANSPONDER CODE:1": 1200,
+            "TOTAL WEIGHT": 24675,
+            "TRANSPONDER CODE:1": 0,
             "TRANSPONDER IDENT": 0,
             "TRANSPONDER STATE:1": 4,
             "TYPICAL DESCENT RATE": 2000,
-            "VERTICAL SPEED": -1,
+            "VERTICAL SPEED": 0,
             "WHEEL RPM:1": 0,
             "ZULU TIME": 0
         },
@@ -250,4 +244,9 @@ where I adapted code from that project for `aircraftapi.lua`.
 * https://github.com/ciribob/DCS-SimpleRadioStandalone
 
 
+### dcs-real-weather
 
+If you are using DCS real Weather mod, this mod can read that 
+baro pressure setting and use it. otherwise baro defaults to 29.92.
+
+* https://github.com/evogelsa/dcs-real-weather

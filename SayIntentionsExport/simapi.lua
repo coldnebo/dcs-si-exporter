@@ -32,51 +32,55 @@ function simapi.default_input()
 	-- SayIntentions.AI SimAPI v1.0 INPUT variables
 	-- from https://portal.sayintentions.ai/simapi/v1/input_variables.txt
 	-- retrieved 2025-04-09
+	--
+	-- * = implemented
+	-- H = hardcoded
+	-- P = partial implementation
 	
 	-- ===== REQUIRED VARIABLES =====
 
 	-- REQUIRED:INSTRUMENTS
 
-	var_data["AIRSPEED INDICATED"] = 0 				-- (INT) Indicated Airspeed in Knots
+	var_data["AIRSPEED INDICATED"] = 0 				-- * (INT) Indicated Airspeed in Knots
 	
-	var_data["COM ACTIVE FREQUENCY:1"] = 100.00    	-- (FLOAT) The current value of the COM1 Active Frequency, in MHz.  Example value:  118.32
+	var_data["COM ACTIVE FREQUENCY:1"] = 100.00    	-- * (FLOAT) The current value of the COM1 Active Frequency, in MHz.  Example value:  118.32
 	var_data["COM ACTIVE FREQUENCY:2"] = 100.00 	-- (FLOAT) The current value of the COM2 Active Frequency, in MHz.  Example value:  132.14
 	
-	var_data["COM RECEIVE:1"] = 0 					-- (INT) Indicates whether the COM1 Speaker is on or off. Possible values are 1 or 0.
+	var_data["COM RECEIVE:1"] = 0 					-- * (INT) Indicates whether the COM1 Speaker is on or off. Possible values are 1 or 0.
 	var_data["COM RECEIVE:2"] = 0    				-- (INT) Indicates whether the COM2 Speaker is on or off. Possible values are 1 or 0.
 
-	var_data["COM TRANSMIT:1"] = 0 					-- (INT) Indicates whether COM1 is currently the active radio (theone that will transmit if the pilot presses the PTT button). Possible values are 1 or 0.
+	var_data["COM TRANSMIT:1"] = 0 					-- * (INT) Indicates whether COM1 is currently the active radio (theone that will transmit if the pilot presses the PTT button). Possible values are 1 or 0.
 	var_data["COM TRANSMIT:2"] = 0   				-- (INT) Indicates whether COM2 is currently the active radio (theone that will transmit if the pilot presses the PTT button). Possible values are 1 or 0.
 
-	var_data["INDICATED ALTITUDE"] = 0    			-- (INT) The indicated altitude, in feet
-	var_data["MAGNETIC COMPASS"] = 0 				-- (INT) The indicated heading, in degrees
-	var_data["TRANSPONDER CODE:1"] = 0   			-- (INT) The currently indicated 4-digit transponder code.  (Example: 2543)
+	var_data["INDICATED ALTITUDE"] = 0    			-- * (INT) The indicated altitude, in feet
+	var_data["MAGNETIC COMPASS"] = 0 				-- * (INT) The indicated heading, in degrees
+	var_data["TRANSPONDER CODE:1"] = 0   			-- * (INT) The currently indicated 4-digit transponder code.  (Example: 2543)
 
 	
 	-- REQUIRED:TELEMETRY
 
-	var_data["AIRSPEED TRUE"] = 0  					-- (INT) True (Ground) Airspeed in Knots
-	var_data["MAGVAR"] = 0  						-- (INT) The magnetic variation at the current position of the aircraft. This will be added to the current heading to get a true heading, thus negative numbers may be used where appropriate. Example value:  -12
+	var_data["AIRSPEED TRUE"] = 0  					-- * (INT) True (Ground) Airspeed in Knots
+	var_data["MAGVAR"] = 0  						-- * (INT) The magnetic variation at the current position of the aircraft. This will be added to the current heading to get a true heading, thus negative numbers may be used where appropriate. Example value:  -12
 	
-	var_data["PLANE ALT ABOVE GROUND MINUS CG"] = 0 -- (INT) The altitude of the plane, above the surface beneath it, measured in feet. If the aircraft is on the ground, this should be 0.
-	var_data["PLANE ALTITUDE"] = 0  				-- (INT) The altitude of the plane, above sea level, measured in feet.
-	var_data["PLANE BANK DEGREES"] = 0 				-- (INT) Current turn angle of the airplane as a positive or negative number. Example: -15 (15 degree turn to the left)
-	var_data["PLANE HEADING DEGREES TRUE"] = 0  	-- (INT) True heading of the airplane, after accounting for magnetic variation
-	var_data["PLANE LATITUDE"] = 0.0 				-- (FLOAT) Current latitude of the airplane, as a decimal.
-	var_data["PLANE LONGITUDE"] = 0.0 				-- (FLOAT) Current longitude of the airplane, as a decimal.
-	var_data["PLANE PITCH DEGREES"] = 0 			-- (INT) Current pitch angle of the airplane, in degrees, as a positive or number number. Example:  -15 indicates a 15-degree downward pitch.
+	var_data["PLANE ALT ABOVE GROUND MINUS CG"] = 0 -- * (INT) The altitude of the plane, above the surface beneath it, measured in feet. If the aircraft is on the ground, this should be 0.
+	var_data["PLANE ALTITUDE"] = 0  				-- * (INT) The altitude of the plane, above sea level, measured in feet.
+	var_data["PLANE BANK DEGREES"] = 0 				-- * (INT) Current turn angle of the airplane as a positive or negative number. Example: -15 (15 degree turn to the left)
+	var_data["PLANE HEADING DEGREES TRUE"] = 0  	-- * (INT) True heading of the airplane, after accounting for magnetic variation
+	var_data["PLANE LATITUDE"] = 0.0 				-- * (FLOAT) Current latitude of the airplane, as a decimal.
+	var_data["PLANE LONGITUDE"] = 0.0 				-- * (FLOAT) Current longitude of the airplane, as a decimal.
+	var_data["PLANE PITCH DEGREES"] = 0 			-- * (INT) Current pitch angle of the airplane, in degrees, as a positive or number number. Example:  -15 indicates a 15-degree downward pitch.
 	
-	var_data["SEA LEVEL PRESSURE"] = 0  			-- (INT) Current barometric pressure, measured in inHG. Example:  2991
-	var_data["SIM ON GROUND"] = 0  					-- (INT) Indicates whether or not the aircraft is currently on the ground. Possible values are 1 or 0.
+	var_data["SEA LEVEL PRESSURE"] = 0  			-- * (INT) Current barometric pressure, measured in inHG. Example:  2991
+	var_data["SIM ON GROUND"] = 0  					-- * (INT) Indicates whether or not the aircraft is currently on the ground. Possible values are 1 or 0.
 
-	var_data["TOTAL WEIGHT"] = 0 					-- (INT) Total weight (in pounds) of the aircraft and all onboard fuel, passengers, and cargo.
-	var_data["VERTICAL SPEED"] = 0  				-- (INT) Current vertical speed in feet per minute, expressed as a positive or negative number.
+	var_data["TOTAL WEIGHT"] = 0 					-- P (INT) Total weight (in pounds) of the aircraft and all onboard fuel, passengers, and cargo.
+	var_data["VERTICAL SPEED"] = 0  				-- * (INT) Current vertical speed in feet per minute, expressed as a positive or negative number.
 
-	var_data["WHEEL RPM:1"] = 0  					-- (INT) Current speed (in revolutions per minute) of any other wheel.  (This can be the same as WHEEL RPM:0 if you want).
+	var_data["WHEEL RPM:1"] = 0  					-- P (INT) Current speed (in revolutions per minute) of any other wheel.  (This can be the same as WHEEL RPM:0 if you want).
 
 	-- REQUIRED:AIRCRAFT DETAILS
 
-	var_data["ENGINE TYPE"] = 4  					-- (INT) Engine type, as an integer. 0 = Piston, 1 = Jet, 2 = None, 3 = Helo(Bell) turbine, 4 = Unsupported, 5 = Turboprop
+	var_data["ENGINE TYPE"] = 4  					-- P (INT) Engine type, as an integer. 0 = Piston, 1 = Jet, 2 = None, 3 = Helo(Bell) turbine, 4 = Unsupported, 5 = Turboprop
 
 
 
@@ -122,6 +126,19 @@ function simapi.default_input()
 	return data, var_data, sim_data
 end
 
+
+-- Output Variables
+
+-- "AUDIO_PANEL_VOLUME_SET" (INT) -- New value for the Intercom volume, expressed as a percentage from 1 to 100
+-- "COM1_VOLUME_SET" (INT)        -- New value for the COM1 Radio volume, expressed as a percentage from 1 to 100
+-- "COM2_RADIO_SET_HZ" (INT)      -- New value for the COM2 Primary Frequency, measured in Hz. (Example: 123455000 is 123.455mhz)
+-- "COM2_RADIO_SWAP" (INT)        -- If set to 1, the airplane should swap the COM2 standby/active frequencies
+-- "COM2_STBY_RADIO_SET_HZ" (INT) -- New value for the COM2 Standby Frequency, measured in Hz. (Example: 123455000 is 123.455mhz)
+-- "COM2_VOLUME_SET" (INT)        -- New value for the COM2 Radio volume, expressed as a percentage from 1 to 100
+-- "COM_RADIO_SET_HZ" (INT)       -- * New value for the COM1 Primary Frequency, measured in Hz. (Example: 123455000 is 123.455mhz)
+-- "COM_RADIO_SWAP" (INT)         -- If set to 1, the airplane should swap the COM1 standby/active frequencies
+-- "COM_STBY_RADIO_SET_HZ" (INT)  -- New value for the COM1 Standby Frequency, measured in Hz. (Example: 123455000 is 123.455mhz)
+-- "XPNDR_SET" (INT)              -- * New value for the transponder code.
 
 function simapi.fetch_output(json, output_file)
     local data = {}

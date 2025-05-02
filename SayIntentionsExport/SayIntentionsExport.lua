@@ -158,7 +158,7 @@ local function getTelemetry()
     
     var_data["SIM ON GROUND"] = var_data["PLANE ALT ABOVE GROUND MINUS CG"] <= 1 and 1 or 0                   -- (INT) Indicates whether or not the aircraft is currently on the ground. Possible values are 1 or 0.
 
-    var_data["TOTAL WEIGHT"] = 10000                    -- (INT) Total weight (in pounds) of the aircraft and all onboard fuel, passengers, and cargo.
+    var_data["TOTAL WEIGHT"] = aircraft_api.get_motw(aircraft_type)             -- (INT) Total weight (in pounds) of the aircraft and all onboard fuel, passengers, and cargo.
     var_data["VERTICAL SPEED"] = math.floor(LoGetVerticalVelocity() * (3.28084 * 60.0))  -- meters/sec to feet/min                  -- (INT) Current vertical speed in feet per minute, expressed as a positive or negative number.
 
     var_data["WHEEL RPM:1"] = var_data["SIM ON GROUND"] == 1 and var_data["AIRSPEED TRUE"] or 0        -- guesstimate             -- (INT) Current speed (in revolutions per minute) of any other wheel.  (This can be the same as WHEEL RPM:0 if you want).
@@ -166,7 +166,7 @@ local function getTelemetry()
     -- REQUIRED:AIRCRAFT DETAILS
 
 
-    var_data["ENGINE TYPE"] = 1           -- hardcode as a jet for now          -- (INT) Engine type, as an integer. 0 = Piston, 1 = Jet, 2 = None, 3 = Helo(Bell) turbine, 4 = Unsupported, 5 = Turboprop
+    var_data["ENGINE TYPE"] = aircraft_api.get_engine_type(aircraft_type)               -- (INT) Engine type, as an integer. 0 = Piston, 1 = Jet, 2 = None, 3 = Helo(Bell) turbine, 4 = Unsupported, 5 = Turboprop
 
 
     --log_marker("finished getTelemetry data collection")

@@ -63,7 +63,6 @@ function aircraft_api.get_vhf_frequency(aircraft_type)
 	return frequency
 end
 
-
 function aircraft_api.set_vhf_frequency(aircraft_type, frequency)
 	local dev -- device for VHF
 
@@ -142,6 +141,32 @@ function aircraft_api.set_mode3_code(aircraft_type, code)
 	-- code comes in from siout as a string
 	local code_int = math.floor(tonumber(code)) 
 	-- TODO
+end
+
+function aircraft_api.get_motw(aircraft_type)
+	if aircraft_type == "F-16C_50" then
+		return 42300
+	elseif aircraft_type == "FA-18C_hornet" then 
+		return 51900
+	elseif aircraft_type == "F-5E-3" then
+		return 24675
+	else
+		return 10000 -- unknown aircraft
+	end
+end
+
+-- (INT) Engine type, as an integer. 
+-- 0 = Piston, 1 = Jet, 2 = None, 3 = Helo(Bell) turbine, 4 = Unsupported, 5 = Turboprop
+function aircraft_api.get_engine_type(aircraft_type)
+	if aircraft_type == "F-16C_50" then
+		return 1
+	elseif aircraft_type == "FA-18C_hornet" then 
+		return 1
+	elseif aircraft_type == "F-5E-3" then
+		return 1
+	else
+		return 1 -- unknown aircraft (jet for now)
+	end
 end
 
 
