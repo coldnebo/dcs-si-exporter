@@ -119,7 +119,7 @@ function simapi.default_input()
 
     sim_data["name"]            = "DCS World"       -- (STRING) the plain-text name of your simulator
     sim_data["version"]         = "2.9"             -- (STRING) the version of your simulator
-    sim_data["adapter_version"] = "0.9"     		-- (STRING) the version of the dcs-si-exporter adapter
+    sim_data["adapter_version"] = "0.9.0"     		-- (STRING) the version of the dcs-si-exporter adapter
     sim_data["simapi_version"]  = "1.0"				-- (STRING) the version of SI SimAPI being used
     sim_data["exe"]             = "DCS.exe"			-- (STRING) This is the windows file executable name of the simulator. This is used by the SayIntentions.AI to determine whether or not the sim is running.  If the sim is running, it tells the app to read the input file (and write the output file) on a regular basis.
 
