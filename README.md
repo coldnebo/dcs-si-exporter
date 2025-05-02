@@ -108,7 +108,9 @@ SayIntentionsExport\
 
 6. startup the SayIntentions.ai client application.
 
-    * you should additionally see `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl` appear.
+    * you should additionally see this file appear: 
+
+      * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl`
 
 Congratulations, if you see those files your install should be working. You can try VFR or IFR flights. 
 
