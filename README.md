@@ -11,7 +11,9 @@ AMAZING!!!
 
 ## Current Status
 
-Work in Progress
+Beta
+
+All the required features to support simAPI are available in the supported maps and aircraft.
 
 
 ### MVP Requirements
@@ -19,25 +21,108 @@ Work in Progress
 Features and Current Status:
 
 * implement [SayIntensions simAPI](https://sayintentionsai.freshdesk.com/support/solutions/articles/154000221017-simapi-developer-howto-integrating-sayintentions-ai-with-any-flight-simulator)
-  * simAPI_input.json - input to the SayIntentions client from this exporter
+  * `simAPI_input.json` - input to the SayIntentions client from this exporter
     * [DONE] setup default structure, required and optional parameters and types
-  * simAPI_output.jsonl - output from the SayIntensions client to this exporter (append on update)
-  	* [INPROGRESS] clear after read
+    * All required fields implemented or hardcoded for now.
+    * only COM1 supported 
+    * only VHF radio mapped to COM1
+    * COM2 disabled
+    * transponder mode3 code now supported and hardcoded ALT on.
+
+  * `simAPI_output.jsonl` - output from the SayIntensions client to this exporter (append on update)
+  	* [DONE] clear after read
+    * can set COM1 from SayIntentions client / AI CoPilot
 
 * Aircraft Supported
   * `F-16C_50`
   * `FA-18C_hornet`
   * `F-5E-3`
 
+* Maps Supported
+  * Caucasus
+  * Marianas
+  * Nevada
+  * Persian Gulf
 
- ### Input Data
 
-* All required fields implemented or hardcoded for now.
-* only COM1 supported 
-* only VHF radio mapped to COM1
-* COM2 disabled
-* transponder mode3 code now supported and hardcoded ALT on.
 
+
+## Package Files
+
+```
+SayIntentionsExport\
+  aircraftapi.lua
+  dcs-si-exporter-LICENSE.txt
+	dkjson.lua
+	dkjson_readme.txt
+  mapapi.lua
+  realweatherapi.lua
+	SayIntentionsExport.lua
+  simapi.lua
+```
+
+## Usage
+
+1. Download the [latest release](https://github.com/coldnebo/dcs-si-exporter/releases) zip.
+
+2. open your DCS scripts folder (depending on whether you use the beta or not) by typing `Windows + R` and 
+   pasting in one of the following and clicking OK to open a File Explorer in the correct location:
+   * `%UserProfile%\Saved Games\DCS\Scripts`
+   * `%UserProfile%\Saved Games\DCS.openbeta\Scripts`
+
+3. drag the `SayIntentionsExport` folder from the release zip into the `Scripts` folder.
+
+4. in the `Scripts` folder, find your `Export.lua` file and add the following line to the end of the file:
+
+```lua
+pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayIntentionsExport/SayIntentionsExport.lua"); end,nil)
+```
+
+5. startup DCS, choose an aircraft and a starting location (i.e. F-16, Nellis, Nevada)
+
+* once the simulation is running you should see the following files in the following locations which
+  will let you know the program is running:
+
+  * `%LOCALAPPDATA%\SayIntentionsAI\dcs-si-exporter_debug.txt`
+  * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_input.json`
+
+  you can check the `dcs-si-exporter_debug.txt` for any errors if things seem to not be working.
+
+6. startup the SayIntentions.ai client application.
+
+  * you should additionally see `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl` appear.
+
+Congratulations, if you see those files your install should be working. You can try VFR or IFR flights. 
+
+Nellis (KLSV) to Laughlin (KIFP) is a good IFR flight as both are towered airports.
+
+
+### Optional DCS RealWeather
+
+If you have the [DCS RealWeather](https://github.com/evogelsa/dcs-real-weather) tool, you can 
+generate a mission using real weather. [Follow the directions](https://github.com/evogelsa/dcs-real-weather/blob/main/cmd/realweather/README.md) 
+in that project to install and setup your directory. 
+
+After the first time you run the app it will generate a file `realweather.log` containing information that this mod can read.
+
+Open the file `%UserProfile%\Saved Games\DCS.openbeta\Scripts\SayIntentionsExport\realweatherapi.lua` and set the directory for 
+the `realweather.log` location, for example:
+
+```lua
+-- Path to the log file (you can change this if needed)
+local log_path = [[D:\games\dcs_apps\realweather_v2.1.1\realweather.log]]
+```
+
+This will allow ATC to report real world baro pressure.
+
+To use this, you would follow these steps before the flight:
+
+1. edit `config.toml` to point at a mission map with a player aircraft setup per the DCS realweather instructions.
+2. run `realweather.exe` to fetch the current weather and write the `realweather.log` file.
+3. start DCS and load the generated `realweather` mission created from your `config.toml` configuration. 
+
+
+### Input Data
 
 * [TODO] Optional fields?
   * `ZULU TIME` and `LOCAL TIME` maybe from mission data?
@@ -65,10 +150,10 @@ Features and Current Status:
   * [TODO] implement? not sure where this function is in various aircraft?
 
 * `TRANSPONDER STATE:1` 
-	* hardcoded to 4 (ALT ON, mode C)
-	* [TODO] implement other modes? this is a nice to have, but probably OFF and ALT make sense.
-	         others may not have equivalents in F-16C? 
-	         0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
+  * hardcoded to 4 (ALT ON, mode C)
+  * [TODO] implement other modes? this is a nice to have, but probably OFF and ALT make sense.
+           others may not have equivalents in F-16C? 
+           0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
 
 example
 
@@ -124,55 +209,6 @@ example
 }
 ```
 
-
-## Package Files
-
-```
-SayIntentionsExport\
-	dkjson.lua
-	dkjson_readme.txt
-	SayIntentionsExport.lua
-```
-
-## Usage
-
-* Download the release zip.
-
-* open your DCS scripts folder (depending on whether you use the beta or not) by typing `Windows + R` and pasting in one of the following and clicking OK to open a File Explorer in the correct location:
-  * `%UserProfile%\Saved Games\DCS\Scripts`
-  * `%UserProfile%\Saved Games\DCS.openbeta\Scripts`
-
-* drag the SayIntentionsExport folder from the release zip into the Scripts folder
-
-* find your Export.lua file and add the following line to the end of the file:
-
-```lua
-pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayIntentionsExport/SayIntentionsExport.lua"); end,nil)
-```
-
-
-* startup DCS, choose an aircraft and a starting location (i.e. Nellis, Nevada)
-
-* once the simulation is running you should see the following files in the following locations which
-  will let you know the program is running:
-
-  * `%LOCALAPPDATA%\SayIntentionsAI\dcs-si-exporter_debug.txt`
-  * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_input.json`
-
-  you can check the `dcs-si-exporter_debug.txt` for any errors if things seem to not be working.
-
-* startup the SayIntentions.ai client application.
-
-  * you should additionally see `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl` appear.
-
-### Optional
-
-If you have the [DCS RealWeather](https://github.com/evogelsa/dcs-real-weather) tool, you can 
-generate a mission using real weather. Follow the directions in that project to install and 
-setup your directory. Then look it the file `realweatherapi.lua` and set the directory for 
-the `realweather.log` to wherever you installed it. 
-
-This will allow ATC to report real world baro pressure.
 
 
 
