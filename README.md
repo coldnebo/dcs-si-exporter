@@ -106,11 +106,9 @@ SayIntentionsExport\
 
       you can check the `dcs-si-exporter_debug.txt` for any errors if things seem to not be working.
 
-6. startup the SayIntentions.ai client application.
+6. startup the SayIntentions.ai client application. you should additionally see this file appear: 
 
-    * you should additionally see this file appear: 
-
-      * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl`
+    * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl`
 
 Congratulations, if you see those files your install should be working. You can try VFR or IFR flights. 
 
