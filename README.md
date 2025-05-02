@@ -9,6 +9,23 @@ AMAZING!!!
 (Thanks to Brian and all the SayIntentions crew for spiking this simAPI so quickly!)
 
 
+## Table of Contents
+
+* [Current Status](#current-status)
+  * [MVP Requirements](#mvp-requirements)
+* [Package Files](#package-files)
+* [Usage](#usage)
+  * [Optional DCS RealWeather](#optional-dcs-weather)
+* [Input Date](#input-data)
+* [Development](#development)
+* [Thank You](#thank-you)
+* [License](#license)
+  * [dkjson](#dkjson)
+  * [DCS-SimpleRadioStandalone](#dcs-simpleradiostandalone)
+  * [dcs-real-weather](#dcs-real-weather)
+
+
+
 ## Current Status
 
 Beta
@@ -67,8 +84,9 @@ SayIntentionsExport\
 
 2. open your DCS scripts folder (depending on whether you use the beta or not) by typing `Windows + R` and 
    pasting in one of the following and clicking OK to open a File Explorer in the correct location:
-   * `%UserProfile%\Saved Games\DCS\Scripts`
-   * `%UserProfile%\Saved Games\DCS.openbeta\Scripts`
+
+     * `%UserProfile%\Saved Games\DCS\Scripts`
+     * `%UserProfile%\Saved Games\DCS.openbeta\Scripts`
 
 3. drag the `SayIntentionsExport` folder from the release zip into the `Scripts` folder.
 
@@ -80,17 +98,17 @@ pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayI
 
 5. startup DCS, choose an aircraft and a starting location (i.e. F-16, Nellis, Nevada)
 
-* once the simulation is running you should see the following files in the following locations which
-  will let you know the program is running:
+    * once the simulation is running you should see the following files in the following locations which
+      will let you know the program is running:
 
-  * `%LOCALAPPDATA%\SayIntentionsAI\dcs-si-exporter_debug.txt`
-  * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_input.json`
+      * `%LOCALAPPDATA%\SayIntentionsAI\dcs-si-exporter_debug.txt`
+      * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_input.json`
 
-  you can check the `dcs-si-exporter_debug.txt` for any errors if things seem to not be working.
+      you can check the `dcs-si-exporter_debug.txt` for any errors if things seem to not be working.
 
 6. startup the SayIntentions.ai client application.
 
-  * you should additionally see `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl` appear.
+    * you should additionally see `%LOCALAPPDATA%\SayIntentionsAI\simAPI_output.jsonl` appear.
 
 Congratulations, if you see those files your install should be working. You can try VFR or IFR flights. 
 
@@ -122,7 +140,7 @@ To use this, you would follow these steps before the flight:
 3. start DCS and load the generated `realweather` mission created from your `config.toml` configuration. 
 
 
-### Input Data
+## Input Data
 
 * [TODO] Optional fields?
   * `ZULU TIME` and `LOCAL TIME` maybe from mission data?
