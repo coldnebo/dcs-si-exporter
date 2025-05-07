@@ -76,11 +76,11 @@ Features and Current Status:
 SayIntentionsExport\
   aircraftapi.lua
   dcs-si-exporter-LICENSE.txt
-	dkjson.lua
-	dkjson_readme.txt
+  dkjson.lua
+  dkjson_readme.txt
   mapapi.lua
   realweatherapi.lua
-	SayIntentionsExport.lua
+  SayIntentionsExport.lua
   simapi.lua
 ```
 
