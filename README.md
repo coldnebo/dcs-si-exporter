@@ -28,9 +28,15 @@ AMAZING!!!
 
 ## Current Status
 
-Beta
+Open Beta
 
 All the required features to support simAPI are available in the supported maps and aircraft.
+
+Please give feedback and issues in [Discussions](https://github.com/coldnebo/dcs-si-exporter/discussions)
+first to give us a chance to provide answers for common problems. Bugs will be split off and tracked in [Issues](https://github.com/coldnebo/dcs-si-exporter/issues).  Please read the current features and limitations before 
+creating issues. 
+
+Thanks!
 
 
 ### MVP Requirements
