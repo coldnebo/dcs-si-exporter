@@ -16,6 +16,8 @@ AMAZING!!!
 * [Package Files](#package-files)
 * [Usage](#usage)
   * [Optional DCS RealWeather](#optional-dcs-weather)
+* [SimBrief Profiles](#simbrief-profiles)
+* [Places To Fly](#places-to-fly)
 * [Input Date](#input-data)
 * [Development](#development)
 * [Thank You](#thank-you)
@@ -144,6 +146,111 @@ To use this, you would follow these steps before the flight:
 1. edit `config.toml` to point at a mission map with a player aircraft setup per the DCS realweather instructions.
 2. run `realweather.exe` to fetch the current weather and write the `realweather.log` file.
 3. start DCS and load the generated `realweather` mission created from your `config.toml` configuration. 
+
+
+## SimBrief Profiles
+
+If you need profiles for SimBrief flight planning, here are some profiles you can use.
+
+* F-16C_50
+  * https://flightsim.to/file/75958/f16-fighting-falcon-viper-simbrief-profile-by-xhaferico-bty007
+
+* FA-18C_hornet
+  * https://flightsim.to/file/69124/boeing-f18-hornet-simbrief-profile-by-imsamu-bty007
+
+* F-5E-3
+  * not yet...
+
+
+## Places to Fly
+
+Here are lists of airports that are modeled in DCS and exist with charts in Navigraph. These should have
+good nav data for flights with SayIntentions. (Other airports exist in one or the other, but don't have 
+charts.)
+
+Here is a Google Map [showing these airports](https://www.google.com/maps/d/edit?mid=17LsH1wD7aLzbGcjq3vYdhXnbpZUCl78&usp=sharing) on the map if you want to know where they are.
+
+
+### Caucasus
+
+Georgia
+
+* UGSB - Batumi
+* UGKO - Kutaisi
+* UGTB - Tbilisi
+
+Russia
+
+* URSS - Sochi
+* URKK - Krasnodar
+* URKA - Anapa
+* URMM - Mineralnye Vody
+* URMN - Nalchik
+* URMO - Beslan
+
+### Persian Gulf
+
+United Arab Emirates 
+
+* OMAA - Zayed International
+* OMAD - Al Bateen Executive
+* OMAL - Al Ain International
+* OMDW - Al Maktoum International
+* OMDB - Dubai International
+* OMSJ - Sharjai International
+* OMRK - Ras Al Khaimah International
+* OMFJ - Fujairah International
+
+Iran
+
+* OIBA - Abu Musa Airport
+* OIBS - Siri International Airport
+* OIBV - Lavan Airport
+* OIBK - Kish International
+* OIBL - Bandar Lengeh International
+* OIKQ - Qeshm International
+* OIKB - Bandar Abbas International
+* OISL - Larestan International
+* OIKJ - Jiroft Airport
+* OISS - Shiraz Shahid International
+* OIKK - Kerman International
+
+
+### Nevada
+
+Arizona
+
+* KIFP - Laughlin/Bullhead 
+
+Nevada
+
+* KHND - Henderson Executive
+* KBVU - Boulder City Municipal
+* KLAS - Harry Reid International
+* KVGT - North Las Vegas
+* KLSV - Nellis Air Force Base
+* 67L - Mesquite Municipal
+
+
+### Marianas
+
+Guam
+
+* PGUA - Andersen Air Force Base
+* PGUM - Antonio B. Won Pat International
+
+Rota
+
+* PGRO - Rota International
+
+Tinian
+
+* PGWT - Tinian International
+
+Saipan
+
+* PGSN - Saipan International
+
 
 
 ## Input Data
