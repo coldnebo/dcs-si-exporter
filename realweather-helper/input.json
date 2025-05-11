@@ -1,0 +1,10 @@
+{
+  "filepaths": {
+    "realweather_dir": "D:\\games\\dcs_apps\\realweather_v2.1.1",
+    "missons_dir": "%UserProfile%\\Saved Games\\DCS.openbeta\\Missions",
+    "input_mission_file": "nellis-ready-f5.miz",
+    "output_mission_file": "realweather.miz"
+  },
+  "map": "Nevada",
+  "icao": "KLSV"
+}
