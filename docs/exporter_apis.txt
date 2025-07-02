@@ -1,15 +1,15 @@
 
-exporter    # SayIntentionsExport.lua main object
+siexporter    # SayIntentionsExport.lua main object
 
-exporter.sayintentions_path 
-exporter.log(msg)  # logs a message to debug file
-exporter.log_file = exporter.sayintentions_path .. "dcs-si-exporter.log"
-exporter.clear_log_file()  # clears the log file
-exporter.version  # version of this exporter
+siexporter.sayintentions_path 
+siexporter.log(msg)  # logs a message to debug file
+siexporter.log_file = siexporter.sayintentions_path .. "dcs-si-exporter.log"
+siexporter.clear_log_file()  # clears the log file
+siexporter.version  # version of this siexporter
 
-exporter.safe_require(library)  # load a library
+siexporter.safe_require(library)  # load a library
 
-exporter.poll() # actions every 2.0 seconds
+siexporter.poll() # actions every 2.0 seconds
 	-- read output
 	-- map state to input
 		-- aircraft
@@ -17,8 +17,8 @@ exporter.poll() # actions every 2.0 seconds
 		-- weather
 
 
-simapi.input_file = exporter.sayintentions_path .. "simAPI_input.json"
-simapi.output_file = exporter.sayintentions_path .. "simAPI_output.jsonl"
+simapi.input_file = siexporter.sayintentions_path .. "simAPI_input.json"
+simapi.output_file = siexporter.sayintentions_path .. "simAPI_output.jsonl"
 
 
 # these are variables output from the SI client via the output file.

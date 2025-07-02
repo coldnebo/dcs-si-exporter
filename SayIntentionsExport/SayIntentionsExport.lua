@@ -24,7 +24,7 @@ package.path = package.path
 
 -- siexporter object attributes and methods
 
-siexporter = {}
+_G.siexporter = {}
 
 siexporter.sayintentions_path = os.getenv("LOCALAPPDATA") .. [[\SayIntentionsAI\]]
 siexporter.log_path = siexporter.sayintentions_path .. "dcs-si-exporter.log"
@@ -62,17 +62,19 @@ siexporter:log("top of file")
 --siexporter:log(tostring(dkjson))
 
 
-local ok, result = pcall(function()
-    return siexporter.safe_require(siexporter, "dkjson")
-end)
+-- local ok, result = pcall(function()
+--     return siexporter.safe_require(siexporter, "dkjson")
+-- end)
 
-if not ok then
-    siexporter:log("safe_require for dkjson threw error: " .. tostring(result))
-else
-    dkjson = result
-    siexporter:log("safe_require returned: " .. tostring(dkjson))
-end
+-- if not ok then
+--     siexporter:log("safe_require for dkjson threw error: " .. tostring(result))
+-- else
+--     dkjson = result
+--     siexporter:log("safe_require returned: " .. tostring(dkjson))
+-- end
 
+dkjson = siexporter:safe_require("dkjson")
+simapi = siexporter:safe_require("simapi")
 
 
 -- local simapi_input_file = sayintentions_path .. "simAPI_input.json"
