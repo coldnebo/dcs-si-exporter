@@ -31,7 +31,7 @@ siexporter.log_path = siexporter.sayintentions_path .. "dcs-si-exporter.log"
     
 function siexporter:log(msg)
     local log_file = io.open(self.log_path, "a")
-    log_file:write("dcs-si-exporter: [" .. msg .. "] reached at " .. os.date() .. "\n")
+    log_file:write("dcs-si-exporter: [" .. tostring(msg) .. "] reached at " .. os.date() .. "\n")
     log_file:close()
 end
 
@@ -74,7 +74,16 @@ siexporter:log("top of file")
 -- end
 
 dkjson = siexporter:safe_require("dkjson")
-simapi = siexporter:safe_require("simapi")
+local simapi = siexporter:safe_require("simapi")
+
+
+-- load the aircraft type
+local aircraft_type = LoGetSelfData().Name
+local aircraft = siexporter:safe_require(aircraft_type)
+
+siexporter:log(aircraft:indicated_airspeed_knots())
+
+siexporter:log(aircraft:get_vhf_frequency())
 
 
 -- local simapi_input_file = sayintentions_path .. "simAPI_input.json"
