@@ -1,0 +1,53 @@
+
+exporter    # SayIntentionsExport.lua main object
+
+exporter.sayintentions_path 
+exporter.log(msg)  # logs a message to debug file
+exporter.log_file = exporter.sayintentions_path .. "dcs-si-exporter.log"
+exporter.clear_log_file()  # clears the log file
+exporter.version  # version of this exporter
+
+exporter.safe_require(library)  # load a library
+
+exporter.poll() # actions every 2.0 seconds
+	-- read output
+	-- map state to input
+		-- aircraft
+		-- terrain
+		-- weather
+
+
+simapi.input_file = exporter.sayintentions_path .. "simAPI_input.json"
+simapi.output_file = exporter.sayintentions_path .. "simAPI_output.jsonl"
+
+
+# these are variables output from the SI client via the output file.
+# the output file is cleared after read so values do not accumulate.
+# this means the output must set ONLY if it is defined on that read.
+simapi.output
+
+# e.g. 
+simapi.output.XPNDR_SET
+
+
+# these are the variables sent to the SI client via the input file.
+simapi.input
+
+# e.g. 
+simapi.input.AIRSPEED_INDICATED = aircraft.get_indicated_airspeed()
+
+
+
+
+
+
+
+
+
+aircraft.get_vhf_frequency
+aircraft.set_vhf_frequency
+
+aircraft.get_mode3_code
+aircraft.set_mode3_code
+
+aircraft.get_motw

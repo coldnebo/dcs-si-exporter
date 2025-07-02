@@ -93,15 +93,17 @@ SayIntentionsExport\
 2. open your DCS scripts folder (depending on whether you use the beta or not) by typing `Windows + R` and 
    pasting in one of the following and clicking OK to open a File Explorer in the correct location:
 
-     * `%UserProfile%\Saved Games\DCS\Scripts`
-     * `%UserProfile%\Saved Games\DCS.openbeta\Scripts`
+     * `%UserProfile%\Saved Games\DCS`
+     * `%UserProfile%\Saved Games\DCS.openbeta`
 
-3. drag the `SayIntentionsExport` folder from the release zip into the `Scripts` folder.
+   under that folder, make sure that `Mods\Services` exists.
+
+3. drag the `SayIntentionsExport` folder from the release zip into the `Mods\Services` folder. You should now have the path `Mods\Services\SayIntentionsExport\*`
 
 4. in the `Scripts` folder, find your `Export.lua` file and add the following line to the end of the file:
 
     ```lua
-    pcall(function() local dcsSr=require('lfs');dofile(lfs.writedir().."Scripts/SayIntentionsExport/SayIntentionsExport.lua"); end,nil)
+    pcall(function() dofile(lfs.writedir()..[[Mods\Services\SayIntentionsExport\SayIntentionsExport.lua]]); end,nil)
     ```
 
 5. startup DCS, choose an aircraft and a starting location (i.e. F-16, Nellis, Nevada)
@@ -109,10 +111,10 @@ SayIntentionsExport\
    once the simulation is running you should see the following files in the following locations which
    will let you know the program is running:
 
-    * `%LOCALAPPDATA%\SayIntentionsAI\dcs-si-exporter_debug.txt`
+    * `%LOCALAPPDATA%\SayIntentionsAI\dcs-si-exporter.log`
     * `%LOCALAPPDATA%\SayIntentionsAI\simAPI_input.json`
 
-   you can check the `dcs-si-exporter_debug.txt` for any errors if things seem to not be working.
+   you can check the `dcs-si-exporter.log` for any errors if things seem to not be working.
 
 6. startup the SayIntentions.ai client application. you should additionally see this file appear: 
 
