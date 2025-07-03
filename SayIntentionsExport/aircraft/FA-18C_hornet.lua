@@ -24,9 +24,9 @@
 
 local Aircraft = siexporter:safe_require("aircraft") -- or adjust path if needed
 
-local F16 = Aircraft:new()
+local FA18 = Aircraft:new()
 
-function F16:get_vhf_frequency()
+function FA18:get_vhf_frequency()
     local dev = GetDevice(38) -- COMM 2 (VHF) device ID
     -- freq in Hz
     local frequency = self:roundTo833(dev:get_frequency())
@@ -35,22 +35,47 @@ function F16:get_vhf_frequency()
 end
 
 -- freq in Hz
-function F16:set_vhf_frequency(frequency)
+function FA18:set_vhf_frequency(frequency)
     local dev = GetDevice(38) -- COMM 2 (VHF) device ID
     dev:set_frequency( frequency )
 end
 
-function F16:get_mode3_code()
-     -- mod 3 transponder ID for F-16C
-     local digit1 = math.floor(GetDevice(0):get_argument_value(546) * 10 + 0.5)
-     local digit2 = math.floor(GetDevice(0):get_argument_value(548) * 10 + 0.5)
-     local digit3 = math.floor(GetDevice(0):get_argument_value(550) * 10 + 0.5)
-     local digit4 = math.floor(GetDevice(0):get_argument_value(552) * 10 + 0.5)
+function FA18:get_mode3_code()
+    -- heh. this is complete madness in terms of an api, but here we are.
+    -- kudos to SRS and DCS-BIOS for figuring this out!
+    -- I suspect that ED has another field much easier to access somewhere in their 
+    -- internal API, but it might not even be exposed to lua.
+    local ufc_raw = list_indication(6)
+    local _ufc = {}
+    local xpdr
 
-     local xpdr = digit1 * 1000 + digit2 * 100 + digit3 * 10 + digit4 * 1
+    -- stream parsing our way to glory!
+    local ufc_match = ufc_raw:gmatch("-----------------------------------------\n([^\n]+)\n([^\n]*)\n")
+    while true do
+        local Key, Value = ufc_match()
+        if not Key then
+            break
+        end
+        _ufc[Key] = Value
+    end
 
-     return xpdr
+    -- hacking the virtual display output to grab temporary state reminds me of 
+    -- hacking redstone computers in minecraft...
+    if _ufc then
+        local scratchpad = _ufc.UFC_ScratchPadString1Display .. _ufc.UFC_ScratchPadString2Display
+        
+        if scratchpad == "XP" then 
+            scratchpad_num = _ufc.UFC_ScratchPadNumberDisplay
+            local mode, code = string.match(scratchpad_num, "([23])%-([0-7]+)")
+            
+            if code then 
+                xpdr = math.floor(tonumber(code)) 
+            end
+        end
+    end
+
+    return xpdr
 end
 
 
-return F16
+return FA18

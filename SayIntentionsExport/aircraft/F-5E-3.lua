@@ -24,10 +24,10 @@
 
 local Aircraft = siexporter:safe_require("aircraft") -- or adjust path if needed
 
-local F16 = Aircraft:new()
+local F5E3 = Aircraft:new()
 
-function F16:get_vhf_frequency()
-    local dev = GetDevice(38) -- COMM 2 (VHF) device ID
+function F5E3:get_vhf_frequency()
+    local dev = GetDevice(23) -- COMM 2 (VHF) device ID
     -- freq in Hz
     local frequency = self:roundTo833(dev:get_frequency())
     
@@ -35,22 +35,22 @@ function F16:get_vhf_frequency()
 end
 
 -- freq in Hz
-function F16:set_vhf_frequency(frequency)
-    local dev = GetDevice(38) -- COMM 2 (VHF) device ID
+function F5E3:set_vhf_frequency(frequency)
+    local dev = GetDevice(23) -- COMM 2 (VHF) device ID
     dev:set_frequency( frequency )
 end
 
-function F16:get_mode3_code()
-     -- mod 3 transponder ID for F-16C
-     local digit1 = math.floor(GetDevice(0):get_argument_value(546) * 10 + 0.5)
-     local digit2 = math.floor(GetDevice(0):get_argument_value(548) * 10 + 0.5)
-     local digit3 = math.floor(GetDevice(0):get_argument_value(550) * 10 + 0.5)
-     local digit4 = math.floor(GetDevice(0):get_argument_value(552) * 10 + 0.5)
+function F5E3:get_mode3_code()
+    -- mod 3 transponder ID for F-5E-3
+    local digit1 = math.floor(GetDevice(0):get_argument_value(211) * 10 + 0.5)
+    local digit2 = math.floor(GetDevice(0):get_argument_value(212) * 10 + 0.5)
+    local digit3 = math.floor(GetDevice(0):get_argument_value(213) * 10 + 0.5)
+    local digit4 = math.floor(GetDevice(0):get_argument_value(214) * 10 + 0.5)
 
-     local xpdr = digit1 * 1000 + digit2 * 100 + digit3 * 10 + digit4 * 1
+    local xpdr = digit1 * 1000 + digit2 * 100 + digit3 * 10 + digit4 * 1
 
-     return xpdr
+    return xpdr
 end
 
 
-return F16
+return F5E3

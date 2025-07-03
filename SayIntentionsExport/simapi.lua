@@ -124,7 +124,10 @@ function simapi:read_si_output()
         siexporter:log("Failed to open file: " .. err)
     end
 
-    -- Step 1: Parse the file and set keys to values
+    -- Step 1: nil the outputs before reading so we know what was present
+    for k in pairs(self.output) do output[k] = nil end
+
+    -- Step 2: Parse the file and set keys to values
     for line in file:lines() do
         if line and line ~= "" then
             local obj, pos, decode_err = dkjson.decode(line)
@@ -138,7 +141,7 @@ function simapi:read_si_output()
     end
     file:close()
 
-	-- Step 2: Truncate the file (clears it)
+	-- Step 3: Truncate the file (clears it)
 	-- the contract of the output file is that once the values are read they
 	-- are expected to be cleared from the file
     local clear_file, cerr = io.open(self.output_file, "w")

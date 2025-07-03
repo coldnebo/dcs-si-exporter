@@ -36,10 +36,6 @@ function Aircraft:new (o)
 	return o
 end
 
-function Aircraft:name()
-	return LoGetSelfData().Name
-end
-
 -- -- support 8.333kHz channel spacing
 function Aircraft:roundTo833(freq)
     local spacing = 25e3 / 3  -- equals 8333.333...
@@ -48,7 +44,12 @@ end
 
 function Aircraft:indicated_airspeed_knots()
 	local K = 1.94384    -- (1 nm / 1852 m) * (3600 s / 1 hr) = 1.94384 nm-s / m-hr
-	return math.floor(LoGetIndicatedAirSpeed() * 1.94384) -- m/s * (1.94384 nm-s / m-hr) = knots (nm/hr)
+	return math.floor(LoGetIndicatedAirSpeed() * K) -- m/s * (1.94384 nm-s / m-hr) = knots (nm/hr)
+end
+
+function Aircraft:true_airspeed_knots()
+	local K = 1.94384    -- (1 nm / 1852 m) * (3600 s / 1 hr) = 1.94384 nm-s / m-hr
+	return math.floor(LoGetTrueAirSpeed() * K) -- m/s to knots
 end
 
 -- (INT) Engine type, as an integer. 
@@ -58,6 +59,65 @@ function Aircraft:get_engine_type()
 	return 1 
 end
 
+function Aircraft:indicated_altitude()
+	local K = 3.28084   -- ft / 1 m
+	return math.floor(LoGetSelfData().LatLongAlt.Alt * K)  -- meters to feet
+end
+
+function Aircraft:magnetic_heading()
+	return math.deg(LoGetMagneticYaw())
+end
+
+function Aircraft:position()
+	return {
+		lat = LoGetSelfData().LatLongAlt.Lat,
+		long = LoGetSelfData().LatLongAlt.Long
+	}
+end
+
+function Aircraft:altitude_msl()
+	local K = 3.28084   -- ft / 1 m
+	return math.floor(LoGetAltitudeAboveSeaLevel() * K)  -- meters to feet
+end
+
+-- bank in degrees
+function Aircraft:bank()
+	local pitch, bank, yaw = LoGetADIPitchBankYaw()
+	return math.deg(bank)
+end
+
+function Aircraft:true_heading()
+	 return math.deg(LoGetSelfData().Heading)  -- rad to deg
+end
+
+function Aircraft:pitch()
+	local pitch, bank, yaw = LoGetADIPitchBankYaw()
+	return math.deg(bank)
+end
+
+function Aircraft:sea_level_pressure()
+	local K = 0.03937  -- 1 in / 25.4 mm  Hg
+	return math.floor(LoGetBasicAtmospherePressure() * K)   -- mm hg
+end
+
+function Aircraft:vertical_speed()
+	local K = 196.8504     -- m/s * 60 s / 1 min * 3.28084 ft / 1 m  = ft/min
+	return math.floor(LoGetVerticalVelocity() * K)  -- meters/sec to feet/min 
+end
+
+function Aircraft:wind_degress_true()
+	local wind = LoGetVectorWindVelocity()
+	local direction_rad = math.atan2(wind.x, wind.z)
+	local direction_deg = (math.deg(direction_rad) + 360) % 360
+	return direction_deg
+end
+
+function Aircraft:wind_knots()
+	local wind = LoGetVectorWindVelocity()
+	local speed_mps = math.sqrt(wind.x^2 + wind.z^2)
+	local speed_knots = speed_mps * 1.94384
+	return speed_knots
+end
 
 
 
@@ -68,21 +128,7 @@ return Aircraft
 -- FA-18C_hornet
 -- F-5E-3
 
--- local sayintentions_path = os.getenv("LOCALAPPDATA") .. "\\SayIntentionsAI\\"
--- local simapi_debug_file = sayintentions_path .. "dcs-si-exporter_debug.txt"
 
--- local function log_marker(msg)
---     local log = io.open(simapi_debug_file, "a")
---     log:write("aircraftapi: [" .. msg .. "] reached at " .. os.date() .. "\n")
---     log:close()
--- end
-
-
--- -- support 8.333kHz channel spacing
--- local function roundTo833(freq)
---     local spacing = 25e3 / 3  -- equals 8333.333...
---     return math.floor(freq / spacing + 0.5) * spacing
--- end
 
 
 -- function aircraft_api.get_vhf_frequency(aircraft_type)

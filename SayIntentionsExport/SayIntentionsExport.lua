@@ -75,15 +75,129 @@ siexporter:log("top of file")
 
 dkjson = siexporter:safe_require("dkjson")
 local simapi = siexporter:safe_require("simapi")
+local mapapi = siexporter:safe_require("mapapi")
 
 
 -- load the aircraft type
 local aircraft_type = LoGetSelfData().Name
 local aircraft = siexporter:safe_require(aircraft_type)
 
-siexporter:log(aircraft:indicated_airspeed_knots())
 
-siexporter:log(aircraft:get_vhf_frequency())
+-- testing code
+--siexporter:log(aircraft:indicated_airspeed_knots())
+--siexporter:log(aircraft:get_vhf_frequency())
+
+
+-- -- persist xpdr between telemetry calls
+local xpdr
+
+function map_data_to_simapi()
+
+    simapi.input["AIRSPEED INDICATED"] = aircraft:indicated_airspeed_knots()
+    simapi.input["AIRSPEED TRUE"] = aircraft:true_airspeed_knots()
+
+    -- COM1 radios (most aircaft in DCS have only one VHF radio)
+    -- FREQ always set before get!
+    if simapi.output["COM_RADIO_SET_HZ"] then
+        aircraft:set_vhf_frequency(simapi.output["COM_RADIO_SET_HZ"])
+    end
+    simapi.input["COM ACTIVE FREQUENCY:1"] = (aircraft:get_vhf_frequency() / 1e6)
+    -- enable RX and TX
+    simapi.input["COM RECEIVE:1"] = 1
+    simapi.input["COM TRANSMIT:1"] = 1  
+
+    simapi.input["ENGINE TYPE"] = aircraft:get_engine_type()
+
+    simapi.input["INDICATED ALTITUDE"] = aircraft:indicated_altitude()
+
+    simapi.input["MAGNETIC COMPASS"] = aircraft:magnetic_heading()
+
+    local lat = aircraft:position().lat
+    local long = aircraft:position().long
+
+    simapi.input["MAGVAR"] = mapapi.getMagVarByLocation(lat, long)
+
+    simapi.input["PLANE_ALTITUDE"] = aircraft:altitude_msl()
+
+    simapi.input["PLANE BANK DEGREES"] = aircraft:bank()
+
+    simapi.input["PLANE HEADING DEGREES TRUE"] = aircraft:true_heading()
+
+    simapi.input["PLANE LATITUDE"] = lat 
+    simapi.input["PLANE LONGITUDE"] = long
+
+    simapi.input["PLANE PITCH DEGREES"] = aircraft:pitch()
+
+    simapi.input["SEA LEVEL PRESSURE"] = aircraft:sea_level_pressure()
+
+
+    -- simapi.input["SIM ON GROUND"] = ?
+
+    -- simapi.input["TOTAL WEIGHT"] = ?
+
+    -- simapi.input["PLANE ALT ABOVE GROUND MINUS CG"] = ?
+
+    -- transponder code is only visible in FA18 when setting it in the UFC, so we have to hoist this and
+    -- persist it.
+    xpdr = aircraft.get_mode3_code() or xpdr
+    simapi.input["TRANSPONDER CODE:1"] = xpdr
+
+    simapi.input["VERTICAL SPEED"] = aircraft:vertical_speed()
+
+    -- simapi.input["WHEEL RPM:1"] = ?
+
+    simapi.input["AMBIENT WIND DIRECTION"] = aircraft:wind_degrees_true()
+    simapi.input["AMBIENT WIND VELOCITY"] = aircraft:wind_knots()
+
+    -- defaults for unsupported options
+    simapi.input["CIRCUIT COM ON:1"] = 1
+    simapi.input["CIRCUIT COM ON:2"] = 1
+    simapi.input["ELECTRICAL MASTER BATTERY:0"] = 1
+    
+
+end
+
+
+
+-- main export function
+function SayIntentionsExport()
+    siexporter:log("running SayIntentionsExport")
+
+    -- first read and clear output file
+    simapi:read_si_output()
+    -- then map data
+    map_data_to_simapi()
+    -- then write output file
+    simapi:write_si_input()
+end
+
+
+local oldLuaExportAfterNextFrame = LuaExportAfterNextFrame
+
+local ExportInterval = 2.0  -- seconds
+local LastExportTime = 0
+
+-- timed export loop (every interval)
+function LuaExportAfterNextFrame()
+    if oldLuaExportAfterNextFrame then oldLuaExportAfterNextFrame() end
+    local currentTime = LoGetModelTime()
+    if currentTime and (currentTime - LastExportTime) >= ExportInterval then
+        SayIntentionsExport()
+        LastExportTime = currentTime
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- local simapi_input_file = sayintentions_path .. "simAPI_input.json"
