@@ -1,0 +1,41 @@
+{
+    "sim": {
+        "adapter_version": "0.9.5",
+        "exe": "DCS.exe",
+        "name": "DCS World",
+        "simapi_version": "1.0",
+        "variables": {
+            "AIRSPEED INDICATED": 377,
+            "AIRSPEED TRUE": 380,
+            "AMBIENT WIND DIRECTION": 42.1769226601,
+            "AMBIENT WIND VELOCITY": 17.212331978019,
+            "CIRCUIT COM ON:1": 1,
+            "COM ACTIVE FREQUENCY:1": 127,
+            "COM ACTIVE FREQUENCY:2": 0,
+            "COM RECEIVE:1": 1,
+            "COM RECEIVE:2": 0,
+            "COM TRANSMIT:1": 1,
+            "COM TRANSMIT:2": 0,
+            "ELECTRICAL MASTER BATTERY:0": 1,
+            "ENGINE TYPE": 1,
+            "INDICATED ALTITUDE": 2920,
+            "MAGNETIC COMPASS": 186.60905507913,
+            "MAGVAR": -11.798132158092,
+            "PLANE ALT ABOVE GROUND MINUS CG": 1080,
+            "PLANE BANK DEGREES": -32.693233217021,
+            "PLANE HEADING DEGREES TRUE": 198.40718723722,
+            "PLANE LATITUDE": 36.214859843485,
+            "PLANE LONGITUDE": -115.05582521873,
+            "PLANE PITCH DEGREES": 17.080180632917,
+            "PLANE_ALTITUDE": 2920,
+            "SEA LEVEL PRESSURE": 2994,
+            "SIM ON GROUND": 0,
+            "TOTAL WEIGHT": 42300,
+            "TRANSPONDER CODE:1": 77,
+            "VERTICAL SPEED": 10209,
+            "WHEEL RPM:0": 0,
+            "WHEEL RPM:1": 3302
+        },
+        "version": "2.9"
+    }
+}
