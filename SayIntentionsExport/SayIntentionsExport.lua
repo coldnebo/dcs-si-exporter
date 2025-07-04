@@ -28,11 +28,13 @@ _G.siexporter = {}
 
 siexporter.sayintentions_path = os.getenv("LOCALAPPDATA") .. [[\SayIntentionsAI\]]
 siexporter.log_path = siexporter.sayintentions_path .. "dcs-si-exporter.log"
-    
+
 function siexporter:log(msg)
-    local log_file = io.open(self.log_path, "a")
-    log_file:write("dcs-si-exporter: [" .. tostring(msg) .. "] reached at " .. os.date() .. "\n")
-    log_file:close()
+    if self.log_file then
+        self.log_file:write("dcs-si-exporter: [" .. tostring(msg) .. "] reached at " .. os.date() .. "\n")
+    else
+        print("LOGGER FAILURE: log_file not initialized")
+    end
 end
 
 function siexporter:clear_log_file()
@@ -53,8 +55,20 @@ function siexporter:safe_require(library)
     return libraryObj
 end
 
+function siexporter:safe_call(func, ...)
+    local ok, result = pcall(func, ...)
+    if not ok then
+        siexporter:log("safe_call error: " .. tostring(result))
+        return nil
+    else
+        --siexporter:log("safe_call returned: " .. tostring(result))
+        return result
+    end
+end
+
 
 siexporter:clear_log_file()
+siexporter.log_file = io.open(siexporter.log_path, "a")
 siexporter:log("top of file")
 
 
@@ -75,7 +89,7 @@ siexporter:log("top of file")
 
 dkjson = siexporter:safe_require("dkjson")
 local simapi = siexporter:safe_require("simapi")
-local mapapi = siexporter:safe_require("mapapi")
+-- local mapapi = siexporter:safe_require("mapapi")
 
 
 -- load the aircraft type
@@ -83,15 +97,13 @@ local aircraft_type = LoGetSelfData().Name
 local aircraft = siexporter:safe_require(aircraft_type)
 
 
--- testing code
---siexporter:log(aircraft:indicated_airspeed_knots())
---siexporter:log(aircraft:get_vhf_frequency())
 
-
--- -- persist xpdr between telemetry calls
+-- persist xpdr between telemetry calls
 local xpdr
+local last_on_ground = false
 
 function map_data_to_simapi()
+    --siexporter:log("map_data_to_simapi")
 
     simapi.input["AIRSPEED INDICATED"] = aircraft:indicated_airspeed_knots()
     simapi.input["AIRSPEED TRUE"] = aircraft:true_airspeed_knots()
@@ -106,7 +118,11 @@ function map_data_to_simapi()
     simapi.input["COM RECEIVE:1"] = 1
     simapi.input["COM TRANSMIT:1"] = 1  
 
+    -- skipping COM2 because the other radio is UHF which isn't modeled in SI yet.
+
     simapi.input["ENGINE TYPE"] = aircraft:get_engine_type()
+
+    -- supposed to be msl
 
     simapi.input["INDICATED ALTITUDE"] = aircraft:indicated_altitude()
 
@@ -115,8 +131,32 @@ function map_data_to_simapi()
     local lat = aircraft:position().lat
     local long = aircraft:position().long
 
-    simapi.input["MAGVAR"] = mapapi.getMagVarByLocation(lat, long)
 
+    -- we don't need the mapapi after all -- YAY 
+    --simapi.input["MAGVAR"] = mapapi.getMagVarByLocation(lat, long)
+    -- this will work on EVERY map now. EXCELLENT!
+    simapi.input["MAGVAR"] = aircraft:magnetic_heading() - aircraft:true_heading()
+
+
+    -- I'm not sure the diff between indicated and msl/agl yet, so let's try it.
+    --siexporter:log("agl: " .. tostring(aircraft:altitude_agl()) )
+    --siexporter:log("cgheight: " .. tostring(aircraft:cg_height()) )
+
+    --siexporter:log("cg_height is: " .. tostring(aircraft.cg_height))
+
+    local altitude_minus_cg = aircraft:altitude_agl() - aircraft:cg_height()
+
+    simapi.input["PLANE ALT ABOVE GROUND MINUS CG"] = altitude_minus_cg
+    local on_ground = (altitude_minus_cg <= 0)
+
+
+    -- is this supposed to be a specific altitude? it might be indicated_altitude()
+    -- instead which seems to be a world space vector (akin to GPS altitude)
+    -- does this value change as Sea Level Pressure changes? (ie. the koltzmand window)
+    -- or is it constant for given map world pressure setting.
+
+    --siexporter:log("aircraft:altitude_msl() : " .. tostring(aircraft:altitude_msl() or "nil"))
+    
     simapi.input["PLANE_ALTITUDE"] = aircraft:altitude_msl()
 
     simapi.input["PLANE BANK DEGREES"] = aircraft:bank()
@@ -128,45 +168,72 @@ function map_data_to_simapi()
 
     simapi.input["PLANE PITCH DEGREES"] = aircraft:pitch()
 
+    -- the question here is whether this is baro pressure in the world, 
+    -- or baro pressure in the koltzman window.  SI wants world, so let's test
     simapi.input["SEA LEVEL PRESSURE"] = aircraft:sea_level_pressure()
 
+    if on_ground then 
+        simapi.input["SIM ON GROUND"] = 1
+    else
+        simapi.input["SIM ON GROUND"] = 0
+    end
 
-    -- simapi.input["SIM ON GROUND"] = ?
-
-    -- simapi.input["TOTAL WEIGHT"] = ?
-
-    -- simapi.input["PLANE ALT ABOVE GROUND MINUS CG"] = ?
+    simapi.input["TOTAL WEIGHT"] = aircraft:total_weight()
 
     -- transponder code is only visible in FA18 when setting it in the UFC, so we have to hoist this and
     -- persist it.
-    xpdr = aircraft.get_mode3_code() or xpdr
+    xpdr = aircraft:get_mode3_code() or xpdr
     simapi.input["TRANSPONDER CODE:1"] = xpdr
 
     simapi.input["VERTICAL SPEED"] = aircraft:vertical_speed()
 
-    -- simapi.input["WHEEL RPM:1"] = ?
+    if on_ground then 
+        simapi.input["WHEEL RPM:1"] = aircraft:wheel_rpm()
+    end
 
     simapi.input["AMBIENT WIND DIRECTION"] = aircraft:wind_degrees_true()
     simapi.input["AMBIENT WIND VELOCITY"] = aircraft:wind_knots()
 
     -- defaults for unsupported options
     simapi.input["CIRCUIT COM ON:1"] = 1
-    simapi.input["CIRCUIT COM ON:2"] = 1
     simapi.input["ELECTRICAL MASTER BATTERY:0"] = 1
     
+    -- LoGetMissionStartTime() is returning nil in exporter context.
+    --simapi.output["LOCAL TIME"] = LoGetMissionStartTime()
 
+    -- if we can figure out the latch for SIM ON GROUND then this could also be triggered
+    -- with whatever the current setting of lat long is.
+    if on_ground and last_on_ground then
+        simapi.output["PLANE TOUCHDOWN LATITUDE"] = lat
+        simapi.output["PLANE TOUCHDOWN LONGITUDE"] = long
+        simapi.output["PLANE TOUCHDOWN NORMAL VELOCITY"] = aircraft:vertical_speed()
+    end
+    
+    last_on_ground = on_ground
+
+    -- another example of a signal, not sure how long this lasts, may need to be hoisted
+    -- if the interval is shorter than the sampling interval.
+    --simapi.output["TRANSPONDER IDENT"] = ?
+
+    simapi.output["TRANSPONDER STATE:1"] = aircraft:transponder_state()
+
+    simapi.output["TYPICAL DESCENT RATE"] = aircraft:typical_descent_rate()
+
+    -- not sure what mission start time is in yet. could be seconds since midnight or 
+    -- something else. let's find out and then fix local and zulu accordingly if possible
+    -- if not, these are optional and can be nil to disable.
+    simapi.output["ZULU TIME"] = LoGetMissionStartTime()
 end
 
 
 
 -- main export function
 function SayIntentionsExport()
-    siexporter:log("running SayIntentionsExport")
-
+    -- siexporter:log("running SayIntentionsExport")
     -- first read and clear output file
     simapi:read_si_output()
     -- then map data
-    map_data_to_simapi()
+    siexporter:safe_call(function() return map_data_to_simapi() end)
     -- then write output file
     simapi:write_si_input()
 end
@@ -188,6 +255,12 @@ function LuaExportAfterNextFrame()
 end
 
 
+function LuaExportStop()
+    if siexporter.log_file then
+        siexporter.log_file.close()
+        siexporter.log_file = nil
+    end
+end
 
 
 

@@ -77,5 +77,9 @@ function FA18:get_mode3_code()
     return xpdr
 end
 
+function FA18:total_weight()
+    return 51900
+end
+
 
 return FA18

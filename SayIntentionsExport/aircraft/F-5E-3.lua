@@ -52,5 +52,9 @@ function F5E3:get_mode3_code()
     return xpdr
 end
 
+function F5E3:total_weight()
+    return 24675
+end
+
 
 return F5E3

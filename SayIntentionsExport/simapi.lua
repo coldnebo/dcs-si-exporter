@@ -39,7 +39,7 @@ local simapi = {
 		["MAGNETIC COMPASS"] = 0,			-- The indicated heading, in degrees
 		["MAGVAR"] = 0,						-- The magnetic variation at the current position of the aircraft. This will be added to the current heading to get a true heading, thus negative numbers may be used where appropriate. Example value:  -12
 		["PLANE ALT ABOVE GROUND MINUS CG"] = 0,   -- The altitude of the plane, above the surface beneath it, measured in feet. If the aircraft is on the ground, this should be 0.
-		["PLANE ALTITUDE"] = 0,				-- The altitude of the plane, above sea level, measured in feet.
+		["PLANE_ALTITUDE"] = 0,				-- The altitude of the plane, above sea level, measured in feet.
 		["PLANE BANK DEGREES"] = 0,			-- Current turn angle of the airplane as a positive or negative number. Example: -15 (15 degree turn to the left)
 		["PLANE HEADING DEGREES TRUE"] = 0, 	-- True heading of the airplane, after accounting for magnetic variation
 		["PLANE LATITUDE"] = 0.0,			-- Current latitude of the airplane, as a decimal.
@@ -50,22 +50,22 @@ local simapi = {
 		["TOTAL WEIGHT"] = 0, 				-- Total weight (in pounds) of the aircraft and all onboard fuel, passengers, and cargo.
 		["TRANSPONDER CODE:1"] = 0,			-- The currently indicated 4-digit transponder code.  (Example: 2543)
 		["VERTICAL SPEED"] = 0, 			-- Current vertical speed in feet per minute, expressed as a positive or negative number.
-		["WHEEL RPM:1"] = 0,				-- Current speed (in revolutions per minute) of any other wheel.  (This can be the same as WHEEL RPM:0 if you want).
+		["WHEEL RPM:0"] = 0,				-- Current speed (in revolutions per minute) of any other wheel.  (This can be the same as WHEEL RPM:0 if you want).
 		
-		-- OPTIONAL
-		["AMBIENT WIND DIRECTION"] = 0,		-- Ambient Wind Direction, in degrees true (at the current position of the aircraft)
-		["AMBIENT WIND VELOCITY"] = 0, 		-- Ambient Wind Velocity, in knots (at the current position of the aircraft)
-		["CIRCUIT COM ON:1"] = 0,			-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM1 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
-		["CIRCUIT COM ON:2"] = 0,			-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM2 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
-		["ELECTRICAL MASTER BATTERY:0"] = 0,	-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the airplane electrical master switch is on or off. Possible values are 1 or 0.
-		["LOCAL TIME"] = 0.0,				-- The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
-		["PLANE TOUCHDOWN LATITUDE"] = 0.0, 	-- The exact latitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
-		["PLANE TOUCHDOWN LONGITUDE"] = 0.0,	-- The exact longitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
-		["PLANE TOUCHDOWN NORMAL VELOCITY"] = 0.0,	-- The "feet per minute" descent rate that was observed at the moment of touchdown. This is optional, but used by various AI personas to judges the smoothness of the most recent landing.
-		["TRANSPONDER IDENT"] = 0,			-- Indicates whether the transponder is currently in "IDENT" mode. Possible values are 1 or 0.
-		["TRANSPONDER STATE:1"] = 0, 		-- Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
-		["TYPICAL DESCENT RATE"] = 0,		-- The typical descent rate of the aircraft being flown. This is used for TOD calculations. This field is optional, and if left blank, a value of 1000fpm will be assumed.
-		["ZULU TIME"] = 0.0   				-- The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
+		-- OPTIONAL (this should be nil to avoid being written)
+		["AMBIENT WIND DIRECTION"] = nil, -- 0,			-- Ambient Wind Direction, in degrees true (at the current position of the aircraft)
+		["AMBIENT WIND VELOCITY"] = nil, -- 0, 			-- Ambient Wind Velocity, in knots (at the current position of the aircraft)
+		["CIRCUIT COM ON:1"] = nil, -- 0,				-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM1 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
+		["CIRCUIT COM ON:2"] = nil, -- 0,				-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM2 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
+		["ELECTRICAL MASTER BATTERY:0"] = nil, -- 0,	-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the airplane electrical master switch is on or off. Possible values are 1 or 0.
+		["LOCAL TIME"] = nil, -- 0.0,					-- The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
+		["PLANE TOUCHDOWN LATITUDE"] = nil, -- 0.0, 	-- The exact latitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
+		["PLANE TOUCHDOWN LONGITUDE"] = nil, -- 0.0,	-- The exact longitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
+		["PLANE TOUCHDOWN NORMAL VELOCITY"] = nil, -- 0.0,	-- The "feet per minute" descent rate that was observed at the moment of touchdown. This is optional, but used by various AI personas to judges the smoothness of the most recent landing.
+		["TRANSPONDER IDENT"] = nil, -- 0,				-- Indicates whether the transponder is currently in "IDENT" mode. Possible values are 1 or 0.
+		["TRANSPONDER STATE:1"] = nil, -- 0, 			-- Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
+		["TYPICAL DESCENT RATE"] = nil, -- 0,			-- The typical descent rate of the aircraft being flown. This is used for TOD calculations. This field is optional, and if left blank, a value of 1000fpm will be assumed.
+		["ZULU TIME"] = nil, -- 0.0   					-- The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
 	},
 	output = {
 		["AUDIO_PANEL_VOLUME_SET"] = 0,     -- New value for the Intercom volume, expressed as a percentage from 1 to 100
@@ -95,7 +95,7 @@ simapi.input_file = siexporter.sayintentions_path .. "simAPI_input.json"
 simapi.output_file = siexporter.sayintentions_path .. "simAPI_output.jsonl"
 
 function simapi:write_si_input()
-	siexporter:log("writing SI input")
+	--siexporter:log("writing SI input")
 	local input_format = {
 		sim = {
 			variables = self.input,
@@ -117,21 +117,20 @@ end
 
 
 function simapi:read_si_output()
-	siexporter:log("reading SI output")
-    
+	-- siexporter:log("reading SI output")
     local file, err = io.open(self.output_file, "r")
     if not file then
         siexporter:log("Failed to open file: " .. err)
     end
 
     -- Step 1: nil the outputs before reading so we know what was present
-    for k in pairs(self.output) do output[k] = nil end
+    for k in pairs(self.output) do self.output[k] = nil end
 
     -- Step 2: Parse the file and set keys to values
     for line in file:lines() do
         if line and line ~= "" then
             local obj, pos, decode_err = dkjson.decode(line)
-            if obj then
+            if obj and obj.value then
                 -- Use the "setvar" field as the key.
                 self.output[obj.setvar] = obj.value
             else

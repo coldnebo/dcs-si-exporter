@@ -52,5 +52,9 @@ function F16:get_mode3_code()
      return xpdr
 end
 
+function F16:total_weight()
+    return 42300
+end
+
 
 return F16
