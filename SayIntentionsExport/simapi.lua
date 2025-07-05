@@ -53,19 +53,19 @@ local simapi = {
 		["WHEEL RPM:0"] = 0,				-- Current speed (in revolutions per minute) of any other wheel.  (This can be the same as WHEEL RPM:0 if you want).
 		
 		-- OPTIONAL (this should be nil to avoid being written)
-		["AMBIENT WIND DIRECTION"] = nil, -- 0,			-- Ambient Wind Direction, in degrees true (at the current position of the aircraft)
-		["AMBIENT WIND VELOCITY"] = nil, -- 0, 			-- Ambient Wind Velocity, in knots (at the current position of the aircraft)
-		["CIRCUIT COM ON:1"] = nil, -- 0,				-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM1 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
-		["CIRCUIT COM ON:2"] = nil, -- 0,				-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM2 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
-		["ELECTRICAL MASTER BATTERY:0"] = nil, -- 0,	-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the airplane electrical master switch is on or off. Possible values are 1 or 0.
-		["LOCAL TIME"] = nil, -- 0.0,					-- The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
-		["PLANE TOUCHDOWN LATITUDE"] = nil, -- 0.0, 	-- The exact latitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
-		["PLANE TOUCHDOWN LONGITUDE"] = nil, -- 0.0,	-- The exact longitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
-		["PLANE TOUCHDOWN NORMAL VELOCITY"] = nil, -- 0.0,	-- The "feet per minute" descent rate that was observed at the moment of touchdown. This is optional, but used by various AI personas to judges the smoothness of the most recent landing.
-		["TRANSPONDER IDENT"] = nil, -- 0,				-- Indicates whether the transponder is currently in "IDENT" mode. Possible values are 1 or 0.
-		["TRANSPONDER STATE:1"] = nil, -- 0, 			-- Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
-		["TYPICAL DESCENT RATE"] = nil, -- 0,			-- The typical descent rate of the aircraft being flown. This is used for TOD calculations. This field is optional, and if left blank, a value of 1000fpm will be assumed.
-		["ZULU TIME"] = nil, -- 0.0   					-- The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
+		["AMBIENT WIND DIRECTION"] = 0,			-- Ambient Wind Direction, in degrees true (at the current position of the aircraft)
+		["AMBIENT WIND VELOCITY"] = 0, 			-- Ambient Wind Velocity, in knots (at the current position of the aircraft)
+		["CIRCUIT COM ON:1"] = 0,				-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM1 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
+		["CIRCUIT COM ON:2"] = 0,				-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM2 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
+		["ELECTRICAL MASTER BATTERY:0"] = 0,	-- If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the airplane electrical master switch is on or off. Possible values are 1 or 0.
+		["LOCAL TIME"] = 0.0,					-- The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
+		["PLANE TOUCHDOWN LATITUDE"] = 0.0, 	-- The exact latitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
+		["PLANE TOUCHDOWN LONGITUDE"] = 0.0,	-- The exact longitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
+		["PLANE TOUCHDOWN NORMAL VELOCITY"] = 0.0,	-- The "feet per minute" descent rate that was observed at the moment of touchdown. This is optional, but used by various AI personas to judges the smoothness of the most recent landing.
+		["TRANSPONDER IDENT"] = 0,				-- Indicates whether the transponder is currently in "IDENT" mode. Possible values are 1 or 0.
+		["TRANSPONDER STATE:1"] = 0, 			-- Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
+		["TYPICAL DESCENT RATE"] = 0,			-- The typical descent rate of the aircraft being flown. This is used for TOD calculations. This field is optional, and if left blank, a value of 1000fpm will be assumed.
+		["ZULU TIME"] = 0.0   					-- The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
 	},
 	output = {
 		["AUDIO_PANEL_VOLUME_SET"] = 0,     -- New value for the Intercom volume, expressed as a percentage from 1 to 100

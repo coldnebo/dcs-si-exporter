@@ -31,6 +31,8 @@ Aircraft = {}
 
 function Aircraft:new (o)
 	o = o or {}   -- create object if user does not provide one
+	o.vhf_frequency = 122800000
+	o.xpdr = 1200
 	setmetatable(o, self)
 	self.__index = self
 	return o
@@ -41,16 +43,24 @@ end
 -- implement these in specific aircraft to provide functionality for the exporter.
 
 function Aircraft:get_vhf_frequency()
-    siexporter:log("abstract method 'get_vhf_frequency' not implemented.")
+    --siexporter:log("abstract method 'get_vhf_frequency' not implemented.")
+    return self.vhf_frequency
 end
 
 -- freq in Hz
 function Aircraft:set_vhf_frequency(frequency)
-    siexporter:log("abstract method 'set_vhf_frequency' not implemented.")
+    --siexporter:log("abstract method 'set_vhf_frequency' not implemented.")
+    self.vhf_frequency = frequency
 end
 
 function Aircraft:get_mode3_code()
-	siexporter:log("abstract method 'get_mode3_code' not implemented.")
+	--siexporter:log("abstract method 'get_mode3_code' not implemented.")
+	return self.xpdr
+end
+
+function Aircraft:set_mode3_code(xpdr)
+	--siexporter:log("abstract method 'set_mode3_code' not implemented.")
+	self.xpdr = xpdr
 end
 
 -- Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground

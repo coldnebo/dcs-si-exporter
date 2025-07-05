@@ -95,7 +95,11 @@ local simapi = siexporter:safe_require("simapi")
 -- load the aircraft type
 local aircraft_type = LoGetSelfData().Name
 local aircraft = siexporter:safe_require(aircraft_type)
-
+if aircraft == nil then
+    siexporter:log("no aircraft found for '" .. aircraft_type .. "', using default generic.")
+    local Aircraft = siexporter:safe_require("aircraft") -- or adjust path if needed 
+    aircraft = Aircraft:new()
+end
 
 
 -- persist xpdr between telemetry calls
@@ -182,8 +186,12 @@ function map_data_to_simapi()
 
     -- transponder code is only visible in FA18 when setting it in the UFC, so we have to hoist this and
     -- persist it.
+    if simapi.output["XPNDR_SET"] then
+        aircraft:set_mode3_code(simapi.output["XPNDR_SET"])
+    end
     xpdr = aircraft:get_mode3_code() or xpdr
     simapi.input["TRANSPONDER CODE:1"] = xpdr
+
 
     simapi.input["VERTICAL SPEED"] = aircraft:vertical_speed()
 
@@ -204,25 +212,25 @@ function map_data_to_simapi()
     -- if we can figure out the latch for SIM ON GROUND then this could also be triggered
     -- with whatever the current setting of lat long is.
     if on_ground and last_on_ground then
-        simapi.output["PLANE TOUCHDOWN LATITUDE"] = lat
-        simapi.output["PLANE TOUCHDOWN LONGITUDE"] = long
-        simapi.output["PLANE TOUCHDOWN NORMAL VELOCITY"] = aircraft:vertical_speed()
+        simapi.input["PLANE TOUCHDOWN LATITUDE"] = lat
+        simapi.input["PLANE TOUCHDOWN LONGITUDE"] = long
+        simapi.input["PLANE TOUCHDOWN NORMAL VELOCITY"] = aircraft:vertical_speed()
     end
     
     last_on_ground = on_ground
 
     -- another example of a signal, not sure how long this lasts, may need to be hoisted
     -- if the interval is shorter than the sampling interval.
-    --simapi.output["TRANSPONDER IDENT"] = ?
+    --simapi.input["TRANSPONDER IDENT"] = ?
 
-    simapi.output["TRANSPONDER STATE:1"] = aircraft:transponder_state()
+    simapi.input["TRANSPONDER STATE:1"] = aircraft:transponder_state()
 
-    simapi.output["TYPICAL DESCENT RATE"] = aircraft:typical_descent_rate()
+    simapi.input["TYPICAL DESCENT RATE"] = aircraft:typical_descent_rate()
 
     -- not sure what mission start time is in yet. could be seconds since midnight or 
     -- something else. let's find out and then fix local and zulu accordingly if possible
     -- if not, these are optional and can be nil to disable.
-    simapi.output["ZULU TIME"] = LoGetMissionStartTime()
+    simapi.input["ZULU TIME"] = LoGetMissionStartTime()
 end
 
 
