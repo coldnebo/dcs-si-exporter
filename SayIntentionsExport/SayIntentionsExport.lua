@@ -90,6 +90,7 @@ siexporter:log("top of file")
 dkjson = siexporter:safe_require("dkjson")
 local simapi = siexporter:safe_require("simapi")
 -- local mapapi = siexporter:safe_require("mapapi")
+local weather = require("realweatherapi")
 
 
 -- load the aircraft type
@@ -174,7 +175,11 @@ function map_data_to_simapi()
 
     -- the question here is whether this is baro pressure in the world, 
     -- or baro pressure in the koltzman window.  SI wants world, so let's test
-    simapi.input["SEA LEVEL PRESSURE"] = aircraft:sea_level_pressure()
+    local pressure, err = weather.get_pressure()
+    if err then 
+        pressure = aircraft:sea_level_pressure()
+    end
+    simapi.input["SEA LEVEL PRESSURE"] = pressure
 
     if on_ground then 
         simapi.input["SIM ON GROUND"] = 1
