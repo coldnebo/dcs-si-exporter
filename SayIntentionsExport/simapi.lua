@@ -108,7 +108,7 @@ function simapi:write_si_input()
 	}
     local file = io.open(self.input_file, "w")
     if file then
-        file:write(dkjson.encode(input_format))
+        file:write(dkjson.encode(input_format, {indent = true}))
         file:close()
     else
         siexporter:log("Failed to open " .. self.input_file .. " for writing")
