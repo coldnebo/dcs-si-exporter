@@ -2,9 +2,7 @@
 
 Digital Combat Simulator (DCS) scripts to integrate with [SayIntentions](https://www.sayintentions.ai/) via their [simAPI](https://www.sayintentions.ai/simapi).
 
-The goal is to have working ATC provided by SayIntentions in DCS.
-
-AMAZING!!!
+This exporter uses the SayIntentions simAPI to allow DCS pilots to use any of SayIntentions products (currently Entourage and Premium).
 
 (Thanks to Brian and all the SayIntentions crew for spiking this simAPI so quickly!)
 
@@ -30,9 +28,16 @@ AMAZING!!!
 
 ## Current Status
 
-Open Beta
+Open Beta  0.9.5
 
-All the required features to support simAPI are available in the supported maps and aircraft.
+All the required features to support simAPI are now available in all maps and aircraft.
+
+A generic aircraft implementation allows radios and transponders to be set virtually by the SI client without requiring 
+mode3, or VHF radios (Spit, Corsair, etc) but also allows ANY aircraft or helicopter in DCS to work with SI out of the box without having to 
+support it specifically.
+
+Supported aircraft allow frequency, transponder (mode3) and ident from within the cockpit. I've refactored the aircraft modules
+to be easy to implement if people want to chip in for aircraft I don't have. Many thanks to the SRS project!
 
 Please give feedback and issues in [Discussions](https://github.com/coldnebo/dcs-si-exporter/discussions)
 first to give us a chance to provide answers for common problems. Bugs will be split off and tracked in [Issues](https://github.com/coldnebo/dcs-si-exporter/issues).  Please read the current features and limitations before 
@@ -53,21 +58,26 @@ Features and Current Status:
     * only VHF radio mapped to COM1
     * COM2 disabled
     * transponder mode3 code now supported and hardcoded ALT on.
+    * transponder IDENT button is available (in implemented aircraft)
 
   * `simAPI_output.jsonl` - output from the SayIntensions client to this exporter (append on update)
   	* [DONE] clear after read
     * can set COM1 from SayIntentions client / AI CoPilot
+    * can set transponder
 
 * Aircraft Supported
   * `F-16C_50`
   * `FA-18C_hornet`
   * `F-5E-3`
+  * `A-10C`
+  * All other aircraft use a default implementation that gives you basic functionality using only the SI client to tune frequencies!
 
 * Maps Supported
   * Caucasus
   * Marianas
   * Nevada
   * Persian Gulf
+  * all maps are now supported automatically! magvar is calculated and does not need to be looked up from map data any more.
 
 
 
@@ -76,11 +86,15 @@ Features and Current Status:
 
 ```
 SayIntentionsExport\
-  aircraftapi.lua
+  aircraft\
+    A-10C.lua
+    F-16C_50.lua
+    F-5E-3.lua
+    FA-18C_hornet.lua
+  aircraft.lua
   dcs-si-exporter-LICENSE.txt
   dkjson.lua
   dkjson_readme.txt
-  mapapi.lua
   realweatherapi.lua
   SayIntentionsExport.lua
   simapi.lua
@@ -133,7 +147,7 @@ in that project to install and setup your directory.
 
 After the first time you run the app it will generate a file `realweather.log` containing information that this mod can read.
 
-Open the file `%UserProfile%\Saved Games\DCS.openbeta\Scripts\SayIntentionsExport\realweatherapi.lua` and set the directory for 
+Open the file `%UserProfile%\Saved Games\DCS.openbeta\Mods\Services\SayIntentionsExport\realweatherapi.lua` and set the directory for 
 the `realweather.log` location, for example:
 
 ```lua
@@ -171,6 +185,10 @@ good nav data for flights with SayIntentions. (Other airports exist in one or th
 charts.)
 
 Here is a Google Map [showing these airports](https://www.google.com/maps/d/edit?mid=17LsH1wD7aLzbGcjq3vYdhXnbpZUCl78&usp=sharing) on the map if you want to know where they are.
+
+UPDATE: We now support ALL maps for DCS, so any map you have will work. This greatly expands the list of available airports past these 4 areas. 
+I'll leave this up, but you can also do your flight planning by looking in the DCS Mission editor and looking for airports that have working ILS/TACAN and then
+searching Navigraph for the ICAO code of that airport. Most of the time this will get you the charts to fly. ENJOY!
 
 
 ### Caucasus
@@ -257,19 +275,19 @@ Saipan
 
 ## Input Data
 
-* [TODO] Optional fields?
-  * `ZULU TIME` and `LOCAL TIME` maybe from mission data?
 
 * `COM ACTIVE FREQUENCY:1` 
   * support 8.333KHz channel spacing
-  * read from supported aircraft
+  * read from supported aircraft or from SI client for other aircraft.
 
 * `MAGVAR`
-  * looked up average per map. see `mapapi.lua`.
+  * now calculated from the difference between true heading and mag yaw. mapapi is unnecessary and has been removed for simplicity.
+    as a result all maps are supported.
 
 * `PLANE ALT ABOVE GROUND MINUS CG`
   * F-16C seems to be 5 feet above the ground when on the ground so hard-coded offset -5.
-  * [TODO] per plane map of offsets? some other way to determine `SIM_ON_GROUND` ?
+  * [DONE] per plane map of offsets - this is implemented specifically in supported aircraft if necessary, but a default of -10 is available 
+    to all aircraft.
 
 * `SEA LEVEL PRESSURE`
   * [OPTIONAL] Reading from [DCS Real Weather mod](https://github.com/evogelsa/dcs-real-weather)
@@ -280,65 +298,68 @@ Saipan
   * read from supported aircraft
 
 * `TRANSPONDER IDENT` - NA
-  * [TODO] implement? not sure where this function is in various aircraft?
+  * [DONE] This is implemented now in the supported aircraft. There is no default implementation so other aircraft don't have this capability.
 
 * `TRANSPONDER STATE:1` 
   * hardcoded to 4 (ALT ON, mode C)
   * [TODO] implement other modes? this is a nice to have, but probably OFF and ALT make sense.
-           others may not have equivalents in F-16C? 
            0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
+
+* [TODO] Optional fields?
+  * `ZULU TIME` and `LOCAL TIME` maybe from mission data?
 
 example
 
 ```json
 {
-    "sim": {
-        "adapter_version": "0.1",
-        "exe": "DCS.exe",
-        "name": "DCS World",
-        "simapi_version": "1.0",
-        "variables": {
-            "AIRSPEED INDICATED": 0,
-            "AIRSPEED TRUE": 0,
-            "AMBIENT WIND DIRECTION": 0,
-            "AMBIENT WIND VELOCITY": 0,
-            "CIRCUIT COM ON:1": 1,
-            "CIRCUIT COM ON:2": 1,
-            "COM ACTIVE FREQUENCY:1": 305,
-            "COM ACTIVE FREQUENCY:2": 100,
-            "COM RECEIVE:1": 1,
-            "COM RECEIVE:2": 0,
-            "COM TRANSMIT:1": 1,
-            "COM TRANSMIT:2": 0,
-            "ELECTRICAL MASTER BATTERY:0": 1,
-            "ENGINE TYPE": 1,
-            "INDICATED ALTITUDE": 1863,
-            "LOCAL TIME": 0,
-            "MAGNETIC COMPASS": 347.76334466074,
-            "MAGVAR": -11.5,
-            "PLANE ALT ABOVE GROUND MINUS CG": 0,
-            "PLANE ALTITUDE": 5,
-            "PLANE BANK DEGREES": 0.028837929124707,
-            "PLANE HEADING DEGREES TRUE": 359.26334466074,
-            "PLANE LATITUDE": 36.245992971049,
-            "PLANE LONGITUDE": -115.03428511504,
-            "PLANE PITCH DEGREES": -0.66272188930467,
-            "PLANE TOUCHDOWN LATITUDE": 0,
-            "PLANE TOUCHDOWN LONGITUDE": 0,
-            "PLANE TOUCHDOWN NORMAL VELOCITY": 0,
-            "SEA LEVEL PRESSURE": 2989,
-            "SIM ON GROUND": 1,
-            "TOTAL WEIGHT": 24675,
-            "TRANSPONDER CODE:1": 0,
-            "TRANSPONDER IDENT": 0,
-            "TRANSPONDER STATE:1": 4,
-            "TYPICAL DESCENT RATE": 2000,
-            "VERTICAL SPEED": 0,
-            "WHEEL RPM:1": 0,
-            "ZULU TIME": 0
-        },
-        "version": "2.9"
-    }
+  "sim":{
+    "simapi_version":"1.0",
+    "name":"DCS World",
+    "variables":{
+      "AIRSPEED INDICATED":4,
+      "AIRSPEED TRUE":0,
+      "AMBIENT WIND DIRECTION":132.16537114901,
+      "AMBIENT WIND VELOCITY":1.7780601581039,
+      "CIRCUIT COM ON:1":1,
+      "CIRCUIT COM ON:2":0,
+      "COM ACTIVE FREQUENCY:1":121.9,
+      "COM ACTIVE FREQUENCY:2":0,
+      "COM RECEIVE:1":1,
+      "COM RECEIVE:2":0,
+      "COM TRANSMIT:1":1,
+      "COM TRANSMIT:2":0,
+      "ELECTRICAL MASTER BATTERY:0":1,
+      "ENGINE TYPE":1,
+      "INDICATED ALTITUDE":261,
+      "LOCAL TIME":0,
+      "MAGNETIC COMPASS":39.300330680186,
+      "MAGVAR":-0.3194656760374,
+      "PLANE ALT ABOVE GROUND MINUS CG":-4,
+      "PLANE BANK DEGREES":-0.00050370070884574,
+      "PLANE HEADING DEGREES TRUE":39.619796356223,
+      "PLANE LATITUDE":13.480007124883,
+      "PLANE LONGITUDE":144.79835748827,
+      "PLANE PITCH DEGREES":-0.31470982390992,
+      "PLANE TOUCHDOWN LATITUDE":13.480007124883,
+      "PLANE TOUCHDOWN LONGITUDE":144.79835748827,
+      "PLANE TOUCHDOWN NORMAL VELOCITY":-1,
+      "PLANE_ALTITUDE":261,
+      "SEA LEVEL PRESSURE":2991,
+      "SIM ON GROUND":1,
+      "TOTAL WEIGHT":51900,
+      "TRANSPONDER CODE:1":6737,
+      "TRANSPONDER IDENT":0,
+      "TRANSPONDER STATE:1":4,
+      "TYPICAL DESCENT RATE":2000,
+      "VERTICAL SPEED":-1,
+      "WHEEL RPM:0":0,
+      "WHEEL RPM:1":0,
+      "ZULU TIME":39221
+    },
+    "adapter_version":"0.9.5",
+    "version":"2.9",
+    "exe":"DCS.exe"
+  }
 }
 ```
 
@@ -356,6 +377,14 @@ example
 ```
 New-Item -ItemType SymbolicLink -Path "%UserProfile%\Saved Games\DCS.openbeta\Scripts\SayIntentionsExport" -Value "path-to-project-dir\dcs-si-exporter\SayIntentionsExport"
 ```
+
+* to run without DCS:
+
+```
+lua testshim.lua
+```
+
+But this was used at the start of the refactor and there are a lot of DCS APIs added since that would need to be mocked. It's probably easiest to run in DCS for now.
 
 
 ## Thank You
