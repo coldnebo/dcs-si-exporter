@@ -1,0 +1,43 @@
+SayIntentions.AI SimAPI v1.0 OUTPUT variables
+----------------------------------------------
+
+Variable: "AUDIO_PANEL_VOLUME_SET" (INT)
+Description: New value for the Intercom volume, expressed as a percentage from 1 to 100
+
+--------------------------
+Variable: "COM1_VOLUME_SET" (INT)
+Description: New value for the COM1 Radio volume, expressed as a percentage from 1 to 100
+
+--------------------------
+Variable: "COM2_RADIO_SET_HZ" (INT)
+Description: New value for the COM2 Primary Frequency, measured in Hz. (Example: 123455000 is 123.455mhz)
+
+--------------------------
+Variable: "COM2_RADIO_SWAP" (INT)
+Description: If set to 1, the airplane should swap the COM2 standby/active frequencies
+
+--------------------------
+Variable: "COM2_STBY_RADIO_SET_HZ" (INT)
+Description: New value for the COM2 Standby Frequency, measured in Hz. (Example: 123455000 is 123.455mhz)
+
+--------------------------
+Variable: "COM2_VOLUME_SET" (INT)
+Description: New value for the COM2 Radio volume, expressed as a percentage from 1 to 100
+
+--------------------------
+Variable: "COM_RADIO_SET_HZ" (INT)
+Description: New value for the COM1 Primary Frequency, measured in Hz. (Example: 123455000 is 123.455mhz)
+
+--------------------------
+Variable: "COM_RADIO_SWAP" (INT)
+Description: If set to 1, the airplane should swap the COM1 standby/active frequencies
+
+--------------------------
+Variable: "COM_STBY_RADIO_SET_HZ" (INT)
+Description: New value for the COM1 Standby Frequency, measured in Hz. (Example: 123455000 is 123.455mhz)
+
+--------------------------
+Variable: "XPNDR_SET" (INT)
+Description: New value for the transponder code.
+
+--------------------------

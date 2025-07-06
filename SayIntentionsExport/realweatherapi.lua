@@ -16,6 +16,8 @@
     -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+-- optional realweather integration 
+-- the only thing really needed is the baro pressure line
 
 local M = {}
 

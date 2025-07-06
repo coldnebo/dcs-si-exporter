@@ -1,0 +1,193 @@
+SayIntentions.AI SimAPI v1.0 INPUT variables
+----------------------------------------------
+
+Variable: "AIRSPEED INDICATED" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: Indicated Airspeed in Knots
+
+--------------------------
+Variable: "AIRSPEED TRUE" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: True (Ground) Airspeed in Knots
+
+--------------------------
+Variable: "COM ACTIVE FREQUENCY:1" (FLOAT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: The current value of the COM1 Active Frequency, in MHz.  Example value:  118.32
+
+--------------------------
+Variable: "COM ACTIVE FREQUENCY:2" (FLOAT)
+Required: Yes  [Required if you want COM2 to function correctly.]
+Description: The current value of the COM2 Active Frequency, in MHz.  Example value:  132.14
+
+--------------------------
+Variable: "COM RECEIVE:1" (INT)
+Required: Yes  [Used to determine if the COM1 speaker is on. This could be forced on at all times if needed.]
+Description: Indicates whether the COM1 Speaker is on or off. Possible values are 1 or 0.
+
+--------------------------
+Variable: "COM RECEIVE:2" (INT)
+Required: Yes  [Used to determine if the COM1 speaker is on. This could be forced on at all times if needed. Additionally, could be removed completely if you want to remove support for the COM2 radio.]
+Description: Indicates whether the COM2 Speaker is on or off. Possible values are 1 or 0.
+
+--------------------------
+Variable: "COM TRANSMIT:1" (INT)
+Required: Yes  [Used to determine if COM1 is the radio currently set as the active transmitter. This could be forced on at all times if needed, and you don't care about supporting COM2.]
+Description: Indicates whether COM1 is currently the active radio (theone that will transmit if the pilot presses the PTT button). Possible values are 1 or 0.
+
+--------------------------
+Variable: "COM TRANSMIT:2" (INT)
+Required: Yes  [Could be removed if you don't want to support COM2.]
+Description: Indicates whether COM2 is currently the active radio (theone that will transmit if the pilot presses the PTT button). Possible values are 1 or 0.
+
+--------------------------
+Variable: "ENGINE TYPE" (INT)
+Required: Yes  [ATC must know the basic performance characteristics of the aircraft. At a minimum, knowing if it's a jet or a prop helps narrow this down. This is non-negotiable, or the IFR arrivals will be off.]
+Description: Engine type, as an integer. 0 = Piston, 1 = Jet, 2 = None, 3 = Helo(Bell) turbine, 4 = Unsupported, 5 = Turboprop
+
+--------------------------
+Variable: "INDICATED ALTITUDE" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: The indicated altitude, in feet
+
+--------------------------
+Variable: "MAGNETIC COMPASS" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: The indicated heading, in degrees
+
+--------------------------
+Variable: "MAGVAR" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: The magnetic variation at the current position of the aircraft. This will be added to the current heading to get a true heading, thus negative numbers may be used where appropriate. Example value:  -12
+
+--------------------------
+Variable: "PLANE ALT ABOVE GROUND MINUS CG" (INT)
+Required: Yes  [Non-Negotiable. Must be included. And MUST be 0 if the plane is on the ground.]
+Description: The altitude of the plane, above the surface beneath it, measured in feet. If the aircraft is on the ground, this should be 0.
+
+--------------------------
+Variable: "PLANE ALTITUDE" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: The altitude of the plane, above sea level, measured in feet.
+
+--------------------------
+Variable: "PLANE BANK DEGREES" (INT)
+Required: Yes  [Used to indicate to ATC that the aircraft is currently turning, which will prevent ATC from telling a pilot they're on the wrong heading. This is required.]
+Description: Current turn angle of the airplane as a positive or negative number. Example: -15 (15 degree turn to the left)
+
+--------------------------
+Variable: "PLANE HEADING DEGREES TRUE" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: True heading of the airplane, after accounting for magnetic variation
+
+--------------------------
+Variable: "PLANE LATITUDE" (FLOAT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: Current latitude of the airplane, as a decimal.
+
+--------------------------
+Variable: "PLANE LONGITUDE" (FLOAT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: Current longitude of the airplane, as a decimal.
+
+--------------------------
+Variable: "PLANE PITCH DEGREES" (INT)
+Required: Yes  [Used to indicate to ATC that the aircraft is currently climbing/descending, which will prevent ATC from telling a pilot they're at the wrong altitude. This is required.]
+Description: Current pitch angle of the airplane, in degrees, as a positive or number number. Example:  -15 indicates a 15-degree downward pitch.
+
+--------------------------
+Variable: "SEA LEVEL PRESSURE" (INT)
+Required: Yes  [Required if you want real-time altimeter readings to be correct. Without it, it will use the data from the METARs, which are likely to be out of date.]
+Description: Current barometric pressure, measured in inHG. Example:  2991
+
+--------------------------
+Variable: "SIM ON GROUND" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: Indicates whether or not the aircraft is currently on the ground. Possible values are 1 or 0.
+
+--------------------------
+Variable: "TOTAL WEIGHT" (INT)
+Required: Yes  [ATC must know the basic performance characteristics of the aircraft. This is used to make assumptions about the aircraft performance capabilities. You can estimate this number if needed, but it should be roughly correct.]
+Description: Total weight (in pounds) of the aircraft and all onboard fuel, passengers, and cargo.
+
+--------------------------
+Variable: "TRANSPONDER CODE:1" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: The currently indicated 4-digit transponder code.  (Example: 2543)
+
+--------------------------
+Variable: "VERTICAL SPEED" (INT)
+Required: Yes  [Non-Negotiable. Must be included.]
+Description: Current vertical speed in feet per minute, expressed as a positive or negative number.
+
+--------------------------
+Variable: "WHEEL RPM:1" (INT)
+Required: Yes  [Required. Used to tell if the aircraft is in motion while on the ground.]
+Description: Current speed (in revolutions per minute) of any other wheel.  (This can be the same as WHEEL RPM:0 if you want).
+
+--------------------------
+Variable: "AMBIENT WIND DIRECTION" (INT)
+Required: No  [If not included, ATC reports of wind-speeds for takeoff and landing clearances and 'wind check' will rely on METAR data, which could be outdated or inaccurate]
+Description: Ambient Wind Direction, in degrees true (at the current position of the aircraft)
+
+--------------------------
+Variable: "AMBIENT WIND VELOCITY" (INT)
+Required: No  [If not included, ATC reports of wind-speeds for takeoff and landing clearances and 'wind check' will rely on METAR data, which could be outdated or inaccurate]
+Description: Ambient Wind Velocity, in knots (at the current position of the aircraft)
+
+--------------------------
+Variable: "CIRCUIT COM ON:1" (INT)
+Required: No  [Settings, Experimental has an option to allow the aircraft model to control the power of the radios. This is only required if you want that to function.]
+Description: If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM1 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
+
+--------------------------
+Variable: "CIRCUIT COM ON:2" (INT)
+Required: No  [Settings, Experimental has an option to allow the aircraft model to control the power of the radios. This is only required if you want that to function.]
+Description: If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the circuit-breaker for COM2 is active.  Possible values are 1 or 0. If your simulator does not support this, set this to 1, always.
+
+--------------------------
+Variable: "ELECTRICAL MASTER BATTERY:0" (INT)
+Required: No  [Settings, Experimental has an option to allow the aircraft model to control the power of the radios. This is only required if you want that to function.]
+Description: If the pilot has checked the box for "Aircraft model controls radio power", then this determines whether the airplane electrical master switch is on or off. Possible values are 1 or 0.
+
+--------------------------
+Variable: "LOCAL TIME" (FLOAT)
+Required: No  [Required if you want ATC to be able to say, "good morning", "good afternoon", etc.  Without it, ATC will always assume "morning".]
+Description: The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
+
+--------------------------
+Variable: "PLANE TOUCHDOWN LATITUDE" (FLOAT)
+Required: No  [Required to determine if the plane landed on the assigned runway. ATC will ignore this if it's not provided.]
+Description: The exact latitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
+
+--------------------------
+Variable: "PLANE TOUCHDOWN LONGITUDE" (FLOAT)
+Required: No  [Required to determine if the plane landed on the assigned runway. ATC will ignore this if it's not provided.]
+Description: The exact longitude where the plane last touched down. This is optional, but used to help determine which runway the airplane most recently landed on.
+
+--------------------------
+Variable: "PLANE TOUCHDOWN NORMAL VELOCITY" (FLOAT)
+Required: No  [Not critical. Used to gauge landing rate, for commentary by flight crews.]
+Description: The "feet per minute" descent rate that was observed at the moment of touchdown. This is optional, but used by various AI personas to judges the smoothness of the most recent landing.
+
+--------------------------
+Variable: "TRANSPONDER IDENT" (INT)
+Required: No  [Not critical. ATC will still find the aircraft, it might just take an extra few seconds.]
+Description: Indicates whether the transponder is currently in "IDENT" mode. Possible values are 1 or 0.
+
+--------------------------
+Variable: "TRANSPONDER STATE:1" (INT)
+Required: No  [The app has a setting called 'Always Squawk Mode C' which the pilot could use in lieu of this variable.]
+Description: Current status of the primary transponder.  0 = Off, 1 = Standby, 2 = Test, 3 = On, 4 = Alt, 5 = Ground
+
+--------------------------
+Variable: "TYPICAL DESCENT RATE" (INT)
+Required: No  [If not included, ATC will assume 1000fpm.]
+Description: The typical descent rate of the aircraft being flown. This is used for TOD calculations. This field is optional, and if left blank, a value of 1000fpm will be assumed.
+
+--------------------------
+Variable: "ZULU TIME" (FLOAT)
+Required: No  [Required if you want ATC to be able to say, "good morning", "good afternoon", etc.  Without it, ATC will always assume "morning".]
+Description: The current time in the sim, measured in seconds since midnight. (Example: 3600 = 2am)
+
+--------------------------

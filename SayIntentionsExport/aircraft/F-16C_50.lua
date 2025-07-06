@@ -1,0 +1,70 @@
+    -- SayIntentions Digital Combat Simulator exporter
+
+    -- Copyright (C) 2025  Larry Kyrala
+
+    -- This program is free software: you can redistribute it and/or modify
+    -- it under the terms of the GNU General Public License as published by
+    -- the Free Software Foundation, either version 3 of the License, or
+    -- (at your option) any later version.
+
+    -- This program is distributed in the hope that it will be useful,
+    -- but WITHOUT ANY WARRANTY; without even the implied warranty of
+    -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    -- GNU General Public License for more details.
+
+    -- You should have received a copy of the GNU General Public License
+    -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+-- Portions of this code adapted from DCS SimpleRadioStandalone (SRS) http://dcssimpleradio.com/
+-- Source: https://github.com/ciribob/DCS-SimpleRadioStandalone (GPLv3)
+-- Original Author(s): Ciaran Fisher
+-- Adapted by: Larry Kyrala for dcs-si-exporter
+
+
+local Aircraft = siexporter:safe_require("aircraft") -- or adjust path if needed
+
+local F16 = Aircraft:new()
+
+function F16:get_vhf_frequency()
+    local dev = GetDevice(38) -- COMM 2 (VHF) device ID
+    -- freq in Hz
+    local frequency = self:roundTo833(dev:get_frequency())
+    
+    return frequency
+end
+
+-- freq in Hz
+function F16:set_vhf_frequency(frequency)
+    local dev = GetDevice(38) -- COMM 2 (VHF) device ID
+    dev:set_frequency( frequency )
+end
+
+function F16:get_mode3_code()
+     -- mod 3 transponder ID for F-16C
+     local digit1 = math.floor(GetDevice(0):get_argument_value(546) * 10 + 0.5)
+     local digit2 = math.floor(GetDevice(0):get_argument_value(548) * 10 + 0.5)
+     local digit3 = math.floor(GetDevice(0):get_argument_value(550) * 10 + 0.5)
+     local digit4 = math.floor(GetDevice(0):get_argument_value(552) * 10 + 0.5)
+
+     local xpdr = digit1 * 1000 + digit2 * 100 + digit3 * 10 + digit4 * 1
+
+     return xpdr
+end
+
+function F16:transponder_ident()
+    local iffIdent = math.floor(GetDevice(0):get_argument_value(125) * 1 + 0.5)
+    --siexporter:log("iffIdent: " .. tostring(iffIdent))
+    if iffIdent == 1 then
+        return 1 
+    else 
+        return 0
+    end 
+end
+
+function F16:total_weight()
+    return 42300
+end
+
+
+return F16
