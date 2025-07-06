@@ -77,6 +77,16 @@ function FA18:get_mode3_code()
     return xpdr
 end
 
+function FA18:transponder_ident()
+    local iffIdent = math.floor(GetDevice(0):get_argument_value(99) * 1 + 0.5)
+    --siexporter:log("iffIdent: " .. tostring(iffIdent))
+    if iffIdent == 1 then
+        return 1 
+    else 
+        return 0
+    end 
+end
+
 function FA18:total_weight()
     return 51900
 end

@@ -226,7 +226,7 @@ function map_data_to_simapi()
 
     -- another example of a signal, not sure how long this lasts, may need to be hoisted
     -- if the interval is shorter than the sampling interval.
-    --simapi.input["TRANSPONDER IDENT"] = ?
+    simapi.input["TRANSPONDER IDENT"] = aircraft:transponder_ident()
 
     simapi.input["TRANSPONDER STATE:1"] = aircraft:transponder_state()
 

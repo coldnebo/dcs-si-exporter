@@ -69,6 +69,12 @@ function Aircraft:transponder_state()
 	return 4 -- Alt
 end
 
+-- by default this is off, must be implemented or it would be constantly 
+-- on. 
+function Aircraft:transponder_ident()
+	return 0 
+end
+
 -- default for all aircraft, overide if desired
 function Aircraft:typical_descent_rate()
 	return 2000

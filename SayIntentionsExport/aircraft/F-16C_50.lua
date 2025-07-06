@@ -52,6 +52,16 @@ function F16:get_mode3_code()
      return xpdr
 end
 
+function F16:transponder_ident()
+    local iffIdent = math.floor(GetDevice(0):get_argument_value(125) * 1 + 0.5)
+    --siexporter:log("iffIdent: " .. tostring(iffIdent))
+    if iffIdent == 1 then
+        return 1 
+    else 
+        return 0
+    end 
+end
+
 function F16:total_weight()
     return 42300
 end
