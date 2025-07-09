@@ -100,25 +100,26 @@ SayIntentionsExport\
   simapi.lua
 ```
 
-## Usage
+## Install and Usage
 
-1. Download the [latest release](https://github.com/coldnebo/dcs-si-exporter/releases) zip.
+1. Download the [latest release](https://github.com/coldnebo/dcs-si-exporter/releases) SayIntentionsExportInstaller.exe.
 
-2. open your DCS scripts folder (depending on whether you use the beta or not) by typing `Windows + R` and 
-   pasting in one of the following and clicking OK to open a File Explorer in the correct location:
+2. Run SayIntentionsExportInstaller.exe.
+
+3. You will be prompted for two locations.
+
+   a. Your DCS settings folder -- you can find this by typing `Windows + R` and pasting in one of the following and clicking OK to open a File Explorer in the correct location:
 
      * `%UserProfile%\Saved Games\DCS`
      * `%UserProfile%\Saved Games\DCS.openbeta`
 
    under that folder, make sure that `Mods\Services` exists.
 
-3. drag the `SayIntentionsExport` folder from the release zip into the `Mods\Services` folder. You should now have the path `Mods\Services\SayIntentionsExport\*`
+   b. If you use the [DCS RealWeather](https://github.com/evogelsa/dcs-real-weather) tool, specify where you unzipped that tool in the 
+   second prompt.  This will make sure that your scripts use the 
+   correct location to read the realweather.log file.
 
-4. in the `Scripts` folder, find your `Export.lua` file and add the following line to the end of the file:
-
-    ```lua
-    pcall(function() dofile(lfs.writedir()..[[Mods\Services\SayIntentionsExport\SayIntentionsExport.lua]]); end,nil)
-    ```
+4. Finish the install.
 
 5. startup DCS, choose an aircraft and a starting location (i.e. F-16, Nellis, Nevada)
 
@@ -147,21 +148,22 @@ in that project to install and setup your directory.
 
 After the first time you run the app it will generate a file `realweather.log` containing information that this mod can read.
 
-Open the file `%UserProfile%\Saved Games\DCS.openbeta\Mods\Services\SayIntentionsExport\realweatherapi.lua` and set the directory for 
-the `realweather.log` location, for example:
-
-```lua
--- Path to the log file (you can change this if needed)
-local log_path = [[D:\games\dcs_apps\realweather_v2.1.1\realweather.log]]
-```
-
-This will allow ATC to report real world baro pressure.
+If you specified this directory during install it will allow ATC to report real world baro pressure. Otherwise you can ignore it.
 
 To use this, you would follow these steps before the flight:
 
 1. edit `config.toml` to point at a mission map with a player aircraft setup per the DCS realweather instructions.
 2. run `realweather.exe` to fetch the current weather and write the `realweather.log` file.
 3. start DCS and load the generated `realweather` mission created from your `config.toml` configuration. 
+
+
+## Uninstall
+
+1. open "Add or Remove Programs"
+
+2. type "SayIntentions Exporter" into the filter and select it.
+
+3. click "Uninstall" and follow the prompts.
 
 
 ## SimBrief Profiles
