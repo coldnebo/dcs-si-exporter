@@ -1,6 +1,6 @@
 [Setup]
 AppName=SayIntentions Exporter
-AppVersion=0.9.5
+AppVersion=0.9.6
 DefaultDirName={code:GetDcsConfigDir}\Mods\Services\SayIntentionsExport
 DisableDirPage=no
 DisableProgramGroupPage=yes

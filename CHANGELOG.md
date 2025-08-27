@@ -1,4 +1,9 @@
 
+* 0.9.6
+	- try to fix installer so that lfs global not assumed
+	- add more logging to realweather api
+	- make sure files match
+
 
 * 0.9.5
 	- refactoring: move to Mods/Services instead of putting everything in Scripts
