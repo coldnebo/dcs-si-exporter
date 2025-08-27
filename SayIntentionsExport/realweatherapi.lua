@@ -30,8 +30,11 @@ function M.get_pressure()
 
     local file = io.open(log_path, "r")
     if not file then
-        return nil, "Failed to open log file: " .. log_path
+        siexporter:log("realweatherapi: Failed to open realweather log file (skipping pressure): " .. log_path)
+        return nil, "Failed to open realweather log file: " .. log_path
     end
+
+    siexporter:log("realweatherapi: Found realweather log file: " .. log_path)
 
     for line in file:lines() do
         if line:find("pressure:") then
@@ -42,19 +45,24 @@ function M.get_pressure()
     file:close()
 
     if not last_pressure_line then
+        siexporter:log("realweatherapi: No pressure line found")
         return nil, "No pressure line found"
     end
 
     local json_str = string.match(last_pressure_line, "{.*}")
     if not json_str then
+        siexporter:log("realweatherapi: Malformed pressure line")
         return nil, "Malformed pressure line"
     end
 
     local inHg = tonumber(string.match(json_str, '"inHg"%s*:%s*([%d%.]+)'))
     if not inHg then
+        siexporter:log("realweatherapi: Couldn't parse inHg value")
         return nil, "Couldn't parse inHg value"
     end
 
+    siexporter:log("realweatherapi: found pressure (inHg): " .. inHg)
+    
     return math.floor(inHg * 100 + 0.5)
 end
 

@@ -49,7 +49,7 @@ begin
   if CurStep = ssPostInstall then
   begin
     ExportFile := dcsConfigDir + '\Scripts\Export.lua';
-    LineToAdd := 'pcall(function() dofile(lfs.writedir()..[[Mods\Services\SayIntentionsExport\SayIntentionsExport.lua]]); end,nil)';
+    LineToAdd := 'pcall(function() local silfs=require('lfs');dofile(silfs.writedir()..[[Mods\Services\SayIntentionsExport\SayIntentionsExport.lua]]); end,nil)';
 
     // Patch or add to Export.lua
     if FileExists(ExportFile) then

@@ -16,6 +16,7 @@
     -- You should have received a copy of the GNU General Public License
     -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+local lfs = require('lfs')
 
 package.path = package.path 
     .. ";" .. lfs.writedir() .. [[Mods\Services\SayIntentionsExport\?.lua]]
@@ -74,7 +75,7 @@ siexporter:log("top of file")
 
 dkjson = siexporter:safe_require("dkjson")
 local simapi = siexporter:safe_require("simapi")
-local weather = require("realweatherapi")
+local weather = siexporter:safe_require("realweatherapi")
 
 
 -- load the aircraft type
@@ -90,6 +91,9 @@ end
 -- persist xpdr between telemetry calls
 local xpdr
 local last_on_ground = false
+
+-- we try to fetch baro from realweather if it's configured...
+local pressure, pressure_err = weather.get_pressure()
 
 function map_data_to_simapi()
     --siexporter:log("map_data_to_simapi")
@@ -146,9 +150,7 @@ function map_data_to_simapi()
 
     simapi.input["PLANE PITCH DEGREES"] = aircraft:pitch()
 
-    -- first, we try to fetch baro from realweather if it's configured...
-    local pressure, err = weather.get_pressure()
-    if err then 
+    if pressure_err then 
         -- otherwise we try to get the internal impl (seems to always be nil?) or return standard (29.92)
         pressure = aircraft:sea_level_pressure()
     end
