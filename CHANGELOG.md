@@ -1,3 +1,15 @@
+* 0.9.8 
+	- reverting to 0.9.6 and using the Claude.ai installer
+	- restored event model
+	- found better dev/prod flow. Switching between dev and prod builds was causing a 
+	  lot of small errors because of the number of manual changes required for switching
+	  context. this is resolved by setting the base dir in the Export.lua area now.
+	- restored si_config.lua written by the controller, ensure that all internal paths
+	  write with trailing slashes convention. 
+
+* 0.9.7
+    - tried to completely rewrite the installer with Claude.ai
+    - however this version breaks the event model, making the Hornet unusable
 
 * 0.9.6
 	- try to fix installer so that lfs global not assumed

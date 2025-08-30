@@ -86,7 +86,7 @@ local simapi = {
 		
 		simapi_version = "1.0",			-- (STRING) the version of SI SimAPI being used
 		
-		adapter_version = "0.9.6"		-- (STRING) the version of this dcs-si-exporter adapter
+		adapter_version = siexporter.app_version  -- (STRING) the version of this dcs-si-exporter adapter
 	}
 }
 
