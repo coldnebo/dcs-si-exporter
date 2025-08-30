@@ -16,11 +16,17 @@
     -- You should have received a copy of the GNU General Public License
     -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-local lfs = require('lfs')
+-- local lfs = require('lfs')
 
+-- package.path = package.path 
+--     .. ";" .. lfs.writedir() .. [[Mods\Services\SayIntentionsExport-github\?.lua]]
+--     .. ";" .. lfs.writedir() .. [[Mods\Services\SayIntentionsExport-github\aircraft\?.lua]]
+
+
+-- Now set package paths relative to this
 package.path = package.path 
-    .. ";" .. lfs.writedir() .. [[Mods\Services\SayIntentionsExport\?.lua]]
-    .. ";" .. lfs.writedir() .. [[Mods\Services\SayIntentionsExport\aircraft\?.lua]]
+    .. ";" .. _G.SIEXPORT_BASE_DIR .. [[?.lua]]
+    .. ";" .. _G.SIEXPORT_BASE_DIR .. [[aircraft\?.lua]]
 
 
 -- siexporter object attributes and methods
@@ -71,6 +77,8 @@ end
 siexporter:clear_log_file()
 siexporter.log_file = io.open(siexporter.log_path, "a")
 siexporter:log("top of file")
+siexporter:log("SIEXPORT_BASE_DIR: '" .. _G.SIEXPORT_BASE_DIR .. '"')
+
 
 
 dkjson = siexporter:safe_require("dkjson")

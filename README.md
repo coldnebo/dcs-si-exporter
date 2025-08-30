@@ -103,6 +103,29 @@ SayIntentionsExport\
 
 ## Install and Usage
 
+
+### Manual Install
+
+1. Download the latest zip.
+
+2. Unzip and put the directory in your `%UserProfile%\Saved Games\DCS.openbeta\Mods\Services` directory.
+
+3. In your `%UserProfile%\Saved Games\DCS.openbeta\Scripts\Export.lua` add the following lines:
+
+```lua
+-- In Export.lua:
+pcall(function() 
+    local silfs=require('lfs');
+    local mod_dir = silfs.writedir()..[[Mods\Services\SayIntentionsExport\]];
+    _G.SIEXPORT_BASE_DIR = mod_dir;
+    dofile(mod_dir..[[SayIntentionsExport.lua]]); 
+end,nil)
+```
+
+
+### Installer
+
+
 1. Download the [latest release](https://github.com/coldnebo/dcs-si-exporter/releases) SayIntentionsExportInstaller.exe.
 
 2. Run SayIntentionsExportInstaller.exe.

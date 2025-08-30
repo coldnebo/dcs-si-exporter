@@ -117,14 +117,16 @@ end
 
 
 function simapi:read_si_output()
+    -- Step 1: nil the outputs before reading so we know what was present
+    for k in pairs(self.output) do self.output[k] = nil end
+
 	-- siexporter:log("reading SI output")
     local file, err = io.open(self.output_file, "r")
     if not file then
-        siexporter:log("Failed to open file: " .. err)
+    	-- the file may not exist if DCS isn't running SI, so don't log spam.
+        --siexporter:log("Failed to open file: " .. err)
+        return
     end
-
-    -- Step 1: nil the outputs before reading so we know what was present
-    for k in pairs(self.output) do self.output[k] = nil end
 
     -- Step 2: Parse the file and set keys to values
     for line in file:lines() do
