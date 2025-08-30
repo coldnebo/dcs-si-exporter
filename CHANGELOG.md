@@ -1,4 +1,7 @@
 
+* 0.9.7
+	- used Claude to completely rewrite the installer
+
 * 0.9.6
 	- try to fix installer so that lfs global not assumed
 	- add more logging to realweather api

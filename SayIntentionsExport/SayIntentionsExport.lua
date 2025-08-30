@@ -18,17 +18,17 @@
 
 local lfs = require('lfs')
 
-package.path = package.path 
-    .. ";" .. lfs.writedir() .. [[Mods\Services\SayIntentionsExport\?.lua]]
-    .. ";" .. lfs.writedir() .. [[Mods\Services\SayIntentionsExport\aircraft\?.lua]]
-
-
 -- siexporter object attributes and methods
 
 _G.siexporter = {}
 
-siexporter.sayintentions_path = os.getenv("LOCALAPPDATA") .. [[\SayIntentionsAI\]]
-siexporter.log_path = siexporter.sayintentions_path .. "dcs-si-exporter.log"
+siexporter = dofile(lfs.writedir() .. [[Mods\Services\SayIntentionsExport\si_config.lua]])
+
+package.path = package.path 
+    .. ";" .. lfs.writedir() .. siexporter.mod_path .. [[\?.lua]]
+    .. ";" .. lfs.writedir() .. siexporter.mod_path .. [[\aircraft\?.lua]]
+
+siexporter.log_path = siexporter.sayintentions_path .. [[\dcs-si-exporter.log]]
 
 function siexporter:log(msg)
     if self.log_file then

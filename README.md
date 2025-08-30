@@ -29,7 +29,7 @@ This exporter uses the SayIntentions simAPI to allow DCS pilots to use any of Sa
 
 ## Current Status
 
-Open Beta  0.9.6
+Open Beta  0.9.7
 
 All the required features to support simAPI are now available in all maps and aircraft.
 
