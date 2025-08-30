@@ -31,9 +31,8 @@ package.path = package.path
 
 -- siexporter object attributes and methods
 
-_G.siexporter = {}
+_G.siexporter = dofile(_G.SIEXPORT_BASE_DIR .. [[si_config.lua]])
 
-siexporter.sayintentions_path = os.getenv("LOCALAPPDATA") .. [[\SayIntentionsAI\]]
 siexporter.log_path = siexporter.sayintentions_path .. "dcs-si-exporter.log"
 
 function siexporter:log(msg)

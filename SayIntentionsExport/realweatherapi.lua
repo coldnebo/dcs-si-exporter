@@ -22,7 +22,7 @@
 local M = {}
 
 -- Path to the log file (you can change this if needed)
-local log_path = [[D:\games\dcs_apps\realweather_v2.3.0\realweather.log]]
+local log_path = siexporter.realweather_path .. "realweather.log"
 
 -- Function to extract the last pressure value (inHg * 100)
 function M.get_pressure()
