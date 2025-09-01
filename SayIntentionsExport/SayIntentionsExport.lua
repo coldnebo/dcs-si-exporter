@@ -79,6 +79,7 @@ local weather = siexporter:safe_require("realweatherapi")
 
 -- load the aircraft type
 local aircraft_type = LoGetSelfData().Name
+siexporter:log("detected aircraft type: '" .. aircraft_type .. "'")
 local aircraft = siexporter:safe_require(aircraft_type)
 if aircraft == nil then
     siexporter:log("no aircraft found for '" .. aircraft_type .. "', using default generic.")
